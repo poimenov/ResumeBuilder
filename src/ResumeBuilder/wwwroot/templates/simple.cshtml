@@ -1,0 +1,173 @@
+@using static ResumeBuilder.Services
+@model Resume
+<html>
+
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title>@Model.Name - @Model.Headline</title>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+                --primary-color: #1f2937;
+                --bg-color: white;
+            }  
+
+            body {
+                font-family: Helvetica Condensed;
+                font-size:14px;
+                line-height: 1.3;
+                min-height: 100vh;
+                padding: 20px;		
+                color: var(--primary-color);
+                background: #f3f4f6;                        
+            }
+
+            h1 {
+                font-size:24px;
+            }
+
+            h2 {
+                font-size:22px;
+            }  
+
+            h3 {
+                border-top: 1px solid var(--primary-color);
+                border-bottom: 1px solid var(--primary-color);
+                margin-top: 12px;
+                margin-bottom: 6px;
+                text-align: center;
+                font-size:20px;
+                clear: both;
+            }
+
+            h4 {
+                font-size:18px;
+            }  
+
+            h5 {
+                font-size:16px;
+            }  
+
+            p {
+                margin-bottom: 6px;
+            }
+
+            ul {
+                margin: 6px 0;
+                padding-left: 24px;
+            }
+
+            i {
+                margin-bottom: 6px;
+            }
+
+            img {
+                float: left;
+                margin-right: 15px; 
+                margin-bottom: 10px;
+                border-radius: 12px;	
+                width: 140px;
+                height: 140px;
+            }   
+
+            a {
+                color: var(--primary-color);
+            }
+
+            .mx-auto {
+                max-width: 210mm;
+                margin: 0 auto;
+                width: 100%;
+                padding: 10px;
+                background: var(--bg-color);
+                box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+                border-radius: 12px;			
+            }
+        </style>
+    </head>
+  <body>
+    <div class="mx-auto">
+      <div>
+        <div style="text-align:center;">
+          <h1>@Model.Name</h1>
+          <h4>@Model.Headline</h4>
+        </div><img src="@Model.Picture" alt="Profile picture"><div>
+          <div>Email: <a href="mailto:@Model.Email" target="_blank">@Model.Email</a></div>
+          <div>Phone: <a href="tel:@Model.Phone" target="_blank">@Model.Phone</a></div>
+          <div>@Model.Location</div>
+            @foreach (var link in Model.Links)
+            {
+                <div><a target="_blank" rel="noopener" href="@link">@link</a></div>
+            }          
+        </div>
+        <h3>Summary</h3>
+        <div>@Raw(Model.Summary)</div>
+        <h3>Skills</h3>
+        <div>
+            @foreach (var skill in Model.Skills)
+            {
+                <h5>@skill.Name</h5>
+                <div>
+                    @foreach(var keyword in skill.Keywords)
+                    {
+                        <i>@keyword</i>
+                    }
+                </div>
+            }
+        </div>
+        <h3>Experience</h3>
+        <div>
+            @foreach(var experience in Model.Experiences)
+            {
+                <div>
+                    <a target="_blank" rel="noopener" href="@experience.Website">
+                        <h4>@experience.Company</h4>
+                    </a>
+                    <h5>@experience.Position</h5>
+                    <b>@experience.Location</b> - <i>@experience.Period</i>
+                    <div>@Raw(experience.Description)</div>
+                </div>
+            }
+        </div>
+        <h3>Edication</h3>
+        <div>
+            @foreach (var education in Model.Educations)
+            {
+                <div>
+                    <a target="_blank" rel="noopener" href="@education.Website">
+                        <h4>@education.School</h4>
+                        <div>@education.Location • @education.Period</div>
+                        <div><b>@education.Area</b> • <i>@education.Degree •  @education.Grade</i></div>
+                    </a>
+                </div>
+            }
+        </div>
+        <h3>Certifications</h3>
+        <div>
+            @foreach (var certification in Model.Certifications)
+            {
+                <h5>@certification.Title</h5>
+                <div>
+                    @certification.Issuer: <a target="_blank" rel="noopener" href="@certification.Website">@certification.Label</a>,
+                    <i>@certification.Date</i>
+                </div>
+            }
+        </div>
+        <h3>Languages</h3>
+        <div>
+            @foreach (var language in Model.Languages)
+            {
+                <div>@language.Name 
+                @if(!string.IsNullOrEmpty(language.Fluency))
+                {
+                    @language.Fluency
+                }
+                </div>
+            }
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

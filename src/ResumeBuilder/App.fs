@@ -1,0 +1,206 @@
+[<AutoOpen>]
+module ResumeBuilder.App
+
+open System
+open System.Linq
+open Microsoft.AspNetCore.Components.Web
+open Microsoft.AspNetCore.Components.Routing
+open MudBlazor
+open Microsoft.Extensions.Localization
+open FSharp.Data
+open Fun.Blazor
+open Fun.Blazor.Router
+open System.Threading.Tasks
+open System.IO
+open Microsoft.JSInterop
+
+let appHeader =
+    html.inject (fun (store: IShareStore) ->
+        MudAppBar'' {
+            Elevation 1
+
+            MudIconButton'' {
+                Icon Icons.Material.Filled.Menu
+                Color Color.Inherit
+                Edge Edge.Start
+                onclick (fun _ -> store.DrawerOpen.Publish not)
+            }
+
+            MudText'' {
+                Typo Typo.h5
+                class' "ml-3"
+                AppSettings.ApplicationName
+            }
+
+            MudSpacer''
+
+            adapt {
+                let! isDarkMode = store.IsDarkMode
+
+                let darkLightModeButtonIcon =
+                    if isDarkMode then
+                        Icons.Material.Rounded.AutoMode
+                    else
+                        Icons.Material.Outlined.DarkMode
+
+                MudIconButton'' {
+                    Icon darkLightModeButtonIcon
+                    Color Color.Inherit
+                    onclick (fun _ -> store.IsDarkMode.Publish(not store.IsDarkMode.Value))
+                }
+
+                MudIconButton'' {
+                    Icon Icons.Material.Filled.MoreVert
+                    Color Color.Inherit
+                    Edge Edge.End
+                }
+            }
+        })
+
+let navmenus =
+    html.injectWithNoKey (fun (store: IShareStore, localizer: IStringLocalizer<SharedResources>) ->
+        adapt {
+            let! drawerOpen = store.DrawerOpen.WithSetter()
+
+            MudDrawer'' {
+                Open' drawerOpen
+                Elevation 2
+                ClipMode DrawerClipMode.Always
+
+                MudNavMenu'' {
+
+                    MudNavLink'' {
+                        Href "/"
+                        Match NavLinkMatch.All
+                        Icon Icons.Material.Filled.Person
+                        localizer["BasicInfo"]
+                    }
+
+                    MudNavLink'' {
+                        Href "/links"
+                        Match NavLinkMatch.All
+                        Icon Icons.Material.Filled.Link
+                        localizer["Links"]
+                    }
+                }
+            }
+
+        })
+
+let routes = html.route [| routeCi "/links" linksPage; routeAny basicInfoPage |]
+
+let mudTheme =
+    let theme = new MudTheme()
+    theme.LayoutProperties <- new LayoutProperties()
+
+    let paletteDark =
+        let p = new PaletteDark()
+        p.Primary <- "#7e6fff"
+        p.Surface <- "#1e1e2d"
+        p.Background <- "#1a1a27"
+        p.BackgroundGray <- "#151521"
+        p.AppbarText <- "#92929f"
+        p.AppbarBackground <- "rgba(26,26,39,0.8)"
+        p.DrawerBackground <- "#1a1a27"
+        p.ActionDefault <- "#74718e"
+        p.ActionDisabled <- "#9999994d"
+        p.ActionDisabledBackground <- "#605f6d4d"
+        p.TextPrimary <- "#b2b0bf"
+        p.TextSecondary <- "#92929f"
+        p.TextDisabled <- "#ffffff33"
+        p.DrawerIcon <- "#92929f"
+        p.DrawerText <- "#92929f"
+        p.GrayLight <- "#2a2833"
+        p.GrayLighter <- "#1e1e2d"
+        p.Info <- "#4a86ff"
+        p.Success <- "#3dcb6c"
+        p.Warning <- "#ffb545"
+        p.Error <- "#ff3f5f"
+        p.LinesDefault <- "#33323e"
+        p.TableLines <- "#33323e"
+        p.Divider <- "#292838"
+        p.OverlayLight <- "#1e1e2d80"
+        p
+
+    let paletteLight =
+        let p = new PaletteLight()
+        p.Black <- "#110e2d"
+        p.AppbarText <- "#424242"
+        p.AppbarBackground <- "rgba(255,255,255,0.8)"
+        p.DrawerBackground <- "#ffffff"
+        p.GrayLight <- "#e8e8e8"
+        p.GrayLighter <- "#f9f9f9"
+        p
+
+    theme.PaletteDark <- paletteDark
+    theme.PaletteLight <- paletteLight
+    theme
+
+let app =
+    html.inject
+        (fun (hook: IComponentHook, store: IShareStore, js: IJSRuntime, localizer: IStringLocalizer<SharedResources>) ->
+            hook.AddFirstAfterRenderTask(fun _ ->
+                task { js.InvokeVoidAsync("split").AsTask() |> Async.AwaitTask |> ignore })
+
+            ErrorBoundary'' {
+                ErrorContent(fun e ->
+                    MudAlert'' {
+                        Severity Severity.Error
+                        string e
+                    })
+
+                adapt {
+                    let! isDarkMode = store.IsDarkMode
+
+                    MudThemeProvider'' {
+                        Theme mudTheme
+                        IsDarkMode isDarkMode
+                    }
+                }
+
+                MudSnackbarProvider''
+                MudPopoverProvider''
+                MudDialogProvider''
+
+                MudLayout'' {
+                    appHeader
+                    navmenus
+
+                    MudMainContent'' {
+                        MudStack'' {
+                            Row true
+                            Spacing 0
+                            class' "main-stack "
+
+                            div {
+                                id "left"
+
+                                MudText'' {
+                                    Typo Typo.h6
+                                    class' "pa-4"
+
+                                    SectionOutlet'' { SectionName "Title" }
+                                }
+
+                                MudContainer'' {
+                                    class' "pa-4"
+                                    routes
+                                }
+                            }
+
+                            div {
+                                id "right"
+                                iframe { id "targetWindow" }
+                            }
+
+                            previewPage
+                        }
+
+                    }
+                }
+            })
+
+type App() =
+    inherit FunComponent()
+
+    override _.Render() = app

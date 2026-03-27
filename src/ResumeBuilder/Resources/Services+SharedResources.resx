@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>        
+    <data name="SwitchTheme" xml:space="preserve">
+        <value>Switch Theme</value>
+    </data> 
+    <data name="BasicInfo" xml:space="preserve">
+        <value>Basic info</value>
+    </data>      
+    <data name="Links" xml:space="preserve">
+        <value>Links</value>
+    </data>      
+    <data name="Summary" xml:space="preserve">
+        <value>Summary</value>
+    </data>  
+    <data name="Picture" xml:space="preserve">
+        <value>Picture</value>
+    </data>           
+    <data name="Experiences" xml:space="preserve">
+        <value>Experiences</value>
+    </data>      
+    <data name="Languages" xml:space="preserve">
+        <value>Languages</value>
+    </data>   
+    <data name="Certifications" xml:space="preserve">
+        <value>Certifications</value>
+    </data> 
+    <data name="Educations" xml:space="preserve">
+        <value>Educations</value>
+    </data>   
+    <data name="Skills" xml:space="preserve">
+        <value>Skills</value>
+    </data>  
+    <data name="Add" xml:space="preserve">
+        <value>Add</value>
+    </data>       
+    <data name="Delete" xml:space="preserve">
+        <value>Delete</value>
+    </data>          
+    <data name="Update" xml:space="preserve">
+        <value>Update</value>
+    </data>          
+    <data name="LoadXML" xml:space="preserve">
+        <value>Load XML</value>
+    </data>            
+    <data name="SaveAs" xml:space="preserve">
+        <value>Save As</value>
+    </data>           
+    <data name="File" xml:space="preserve">
+        <value>File</value>
+    </data>     
+    <data name="SelectPicture" xml:space="preserve">
+        <value>Select Picture</value>
+    </data> 
+    <data name="ProfilePicture" xml:space="preserve">
+        <value>Profile Picture</value>
+    </data>    
+    <data name="SelectImgFile" xml:space="preserve">
+        <value>Select Image File</value>
+    </data>     
+    <data name="Name" xml:space="preserve">
+        <value>Name</value>
+    </data>    
+    <data name="Headline" xml:space="preserve">
+        <value>Headline</value>
+    </data> 
+    <data name="Location" xml:space="preserve">
+        <value>Location</value>
+    </data> 
+    <data name="Email" xml:space="preserve">
+        <value>Email</value>
+    </data> 
+    <data name="Phone" xml:space="preserve">
+        <value>Phone</value>
+    </data> 
+    <data name="InvalidUrlMessage" xml:space="preserve">
+        <value>The url is invalid</value>
+    </data>    
+    <data name="InvalidEmailMessage" xml:space="preserve">
+        <value>The email is invalid</value>
+    </data> 
+    <data name="InvalidPhoneMessage" xml:space="preserve">
+        <value>The phone is invalid</value>
+    </data>                                        
+</root>

@@ -1,0 +1,16 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": ".NET Core Launch (console)",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/src/ResumeBuilder/bin/Debug/net10.0/ResumeBuilder.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/src/ResumeBuilder",
+            "stopAtEntry": false,
+            "console": "internalConsole"
+        }
+    ]
+}

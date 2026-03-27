@@ -1,0 +1,42 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <NoDefaultLaunchSettingsFile>True</NoDefaultLaunchSettingsFile>
+    <ApplicationIcon>wwwroot/images/favicon.ico</ApplicationIcon>
+    <PreserveCompilationContext>true</PreserveCompilationContext>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="AppSettings.fs" />
+    <Compile Include="Services.fs" />
+    <Compile Include="Preview.fs" />
+    <Compile Include="BasicInfo.fs" />
+    <Compile Include="Links.fs" />
+    <Compile Include="App.fs" />
+    <Compile Include="Program.fs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Update="wwwroot\**">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Update="log4net.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="FSharp.Data" Version="8.*" />
+    <PackageReference Include="log4net" Version="3.3.0" />
+    <PackageReference Include="Photino.Blazor" Version="4.0.13" />
+    <PackageReference Include="Fun.Blazor.Wasm" Version="4.1.*" />
+    <PackageReference Include="Fun.Blazor.MudBlazor" Version="8.0.0" />
+    <PackageReference Include="MudBlazor.Translations" Version="2.7.0" />
+    <PackageReference Include="Fun.Blazor.Microsoft.Web" Version="10.0.*" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="10.0.*" />
+    <PackageReference Include="Microsoft.Extensions.Localization" Version="10.0.*" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Log4Net.AspNetCore" Version="8.0.0" />
+    <PackageReference Include="PuppeteerSharp" Version="24.39.1" />
+    <PackageReference Include="RazorLight" Version="2.3.1" />
+  </ItemGroup>
+</Project>

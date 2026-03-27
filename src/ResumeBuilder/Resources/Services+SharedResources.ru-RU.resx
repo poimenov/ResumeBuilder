@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>        
+    <data name="SwitchTheme" xml:space="preserve">
+        <value>Переключить тему</value>
+    </data> 
+    <data name="BasicInfo" xml:space="preserve">
+        <value>Основное</value>
+    </data> 
+    <data name="Links" xml:space="preserve">
+        <value>Ссылки</value>
+    </data>              
+    <data name="Summary" xml:space="preserve">
+        <value>Резюме</value>
+    </data>  
+    <data name="Picture" xml:space="preserve">
+        <value>Портрет</value>
+    </data>           
+    <data name="Experiences" xml:space="preserve">
+        <value>Опыт работы</value>
+    </data>      
+    <data name="Languages" xml:space="preserve">
+        <value>Языки</value>
+    </data>   
+    <data name="Certifications" xml:space="preserve">
+        <value>Сертификаты</value>
+    </data> 
+    <data name="Educations" xml:space="preserve">
+        <value>Образование</value>
+    </data>   
+    <data name="Skills" xml:space="preserve">
+        <value>Навыки</value>
+    </data> 
+    <data name="Add" xml:space="preserve">
+        <value>Добавить</value>
+    </data>       
+    <data name="Delete" xml:space="preserve">
+        <value>Удалить</value>
+    </data>          
+    <data name="Update" xml:space="preserve">
+        <value>Обновить</value>
+    </data>          
+    <data name="LoadXML" xml:space="preserve">
+        <value>Загрузить XML</value>
+    </data>            
+    <data name="SaveAs" xml:space="preserve">
+        <value>Сохранить как</value>
+    </data>           
+    <data name="File" xml:space="preserve">
+        <value>Файл</value>
+    </data>     
+    <data name="SelectPicture" xml:space="preserve">
+        <value>Выбрать картинку</value>
+    </data> 
+    <data name="ProfilePicture" xml:space="preserve">
+        <value>Картинка профайла</value>
+    </data>   
+    <data name="SelectImgFile" xml:space="preserve">
+        <value>Выберите файл картинки</value>
+    </data>  
+    <data name="Name" xml:space="preserve">
+        <value>Имя</value>
+    </data>    
+    <data name="Headline" xml:space="preserve">
+        <value>Подзаголовок</value>
+    </data> 
+    <data name="Location" xml:space="preserve">
+        <value>Местоположение</value>
+    </data> 
+    <data name="Email" xml:space="preserve">
+        <value>Эл. почта</value>
+    </data> 
+    <data name="Phone" xml:space="preserve">
+        <value>Телефон</value>
+    </data> 
+    <data name="InvalidUrlMessage" xml:space="preserve">
+        <value>url недействительный</value>
+    </data> 
+    <data name="InvalidEmailMessage" xml:space="preserve">
+        <value>эл.почта недействительна</value>
+    </data> 
+    <data name="InvalidPhoneMessage" xml:space="preserve">
+        <value>телефон недействительный</value>
+    </data>                                         
+</root>
