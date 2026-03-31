@@ -8,8 +8,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="AppSettings.fs" />
-    <Compile Include="Services.fs" />
+    <Compile Include="Services.fs" />    
     <Compile Include="Preview.fs" />
+    <Compile Include="AppMenu.fs" />
     <Compile Include="BasicInfo.fs" />
     <Compile Include="Links.fs" />
     <Compile Include="App.fs" />

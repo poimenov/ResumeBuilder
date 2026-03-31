@@ -40,7 +40,7 @@
         <value>Update</value>
     </data>          
     <data name="LoadXML" xml:space="preserve">
-        <value>Load XML</value>
+        <value>Load from XML</value>
     </data>            
     <data name="SaveAs" xml:space="preserve">
         <value>Save As</value>
@@ -80,5 +80,32 @@
     </data> 
     <data name="InvalidPhoneMessage" xml:space="preserve">
         <value>The phone is invalid</value>
-    </data>                                        
+    </data>      
+     <data name="Management" xml:space="preserve">
+        <value>Management</value>
+    </data>     
+     <data name="Template" xml:space="preserve">
+        <value>Template</value>
+    </data>
+     <data name="Language" xml:space="preserve">
+        <value>Language</value>
+    </data>   
+    <data name="NeedsAppRestart" xml:space="preserve">
+        <value>Changes will take effect after restart program</value>
+    </data> 
+    <data name="English" xml:space="preserve">
+        <value>English</value>
+    </data>  
+    <data name="Russian" xml:space="preserve">
+        <value>Russian</value>
+    </data>    
+    <data name="SelectXmlFile" xml:space="preserve">
+        <value>Select XML File</value>
+    </data>  
+    <data name="SelectHtmlFile" xml:space="preserve">
+        <value>Select HTML File</value>
+    </data>   
+    <data name="SelectPdfFile" xml:space="preserve">
+        <value>Select PDF File</value>
+    </data>                                                
 </root>

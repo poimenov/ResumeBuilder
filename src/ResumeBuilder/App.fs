@@ -2,60 +2,55 @@
 module ResumeBuilder.App
 
 open System
-open System.Linq
+open Microsoft.AspNetCore.Components
 open Microsoft.AspNetCore.Components.Web
 open Microsoft.AspNetCore.Components.Routing
 open MudBlazor
 open Microsoft.Extensions.Localization
-open FSharp.Data
+open Microsoft.Extensions.Options
 open Fun.Blazor
 open Fun.Blazor.Router
-open System.Threading.Tasks
-open System.IO
 open Microsoft.JSInterop
 
 let appHeader =
-    html.inject (fun (store: IShareStore) ->
-        MudAppBar'' {
-            Elevation 1
-
-            MudIconButton'' {
-                Icon Icons.Material.Filled.Menu
-                Color Color.Inherit
-                Edge Edge.Start
-                onclick (fun _ -> store.DrawerOpen.Publish not)
-            }
-
-            MudText'' {
-                Typo Typo.h5
-                class' "ml-3"
-                AppSettings.ApplicationName
-            }
-
-            MudSpacer''
-
-            adapt {
-                let! isDarkMode = store.IsDarkMode
-
-                let darkLightModeButtonIcon =
-                    if isDarkMode then
-                        Icons.Material.Rounded.AutoMode
-                    else
-                        Icons.Material.Outlined.DarkMode
+    html.inject
+        (fun (services: IServices) ->
+            MudAppBar'' {
+                Elevation 1
 
                 MudIconButton'' {
-                    Icon darkLightModeButtonIcon
+                    Icon Icons.Material.Filled.Menu
                     Color Color.Inherit
-                    onclick (fun _ -> store.IsDarkMode.Publish(not store.IsDarkMode.Value))
+                    Edge Edge.Start
+                    onclick (fun _ -> services.Store.DrawerOpen.Publish not)
                 }
 
-                MudIconButton'' {
-                    Icon Icons.Material.Filled.MoreVert
-                    Color Color.Inherit
-                    Edge Edge.End
+                MudText'' {
+                    Typo Typo.h5
+                    class' "ml-3"
+                    AppSettings.ApplicationName
                 }
-            }
-        })
+
+                MudSpacer''
+
+                adapt {
+                    let! isDarkMode = services.Store.IsDarkMode
+
+                    let darkLightModeButtonIcon =
+                        if isDarkMode then
+                            Icons.Material.Rounded.AutoMode
+                        else
+                            Icons.Material.Outlined.DarkMode
+
+                    MudIconButton'' {
+                        Icon darkLightModeButtonIcon
+                        Color Color.Inherit
+                        onclick (fun _ -> services.Store.IsDarkMode.Publish(not services.Store.IsDarkMode.Value))
+                    }
+
+                    appMenu services
+                }
+            })
 
 let navmenus =
     html.injectWithNoKey (fun (store: IShareStore, localizer: IStringLocalizer<SharedResources>) ->

@@ -5,9 +5,9 @@ open Fun.Blazor
 open System.IO
 open Microsoft.JSInterop
 
-let setTargetOutputAsync (js: IJSRuntime, resume: Resume, engine: IRazorEngineService) =
+let setTargetOutputAsync (js: IJSRuntime, templateName: string, resume: Resume, engine: IRazorEngineService) =
     task {
-        let! output = engine.RenderAsync("simple", resume)
+        let! output = engine.RenderAsync(templateName, resume)
         let outputStream = new MemoryStream(System.Text.Encoding.UTF8.GetBytes output)
         let strRef = new DotNetStreamReference(outputStream, false)
 
@@ -33,6 +33,7 @@ let previewPage =
                 let! skills = store.Skills
                 let! experiences = store.Experiences
                 let! languages = store.Languages
+                let! template = store.Template
 
                 let resume =
                     { Name = name
@@ -49,6 +50,6 @@ let previewPage =
                       Experiences = experiences
                       Languages = languages }
 
-                setTargetOutputAsync(js, resume, engine).Result |> ignore
+                setTargetOutputAsync(js, template, resume, engine).Result |> ignore
             }
         })

@@ -49,7 +49,7 @@
         <value>Файл</value>
     </data>     
     <data name="SelectPicture" xml:space="preserve">
-        <value>Выбрать картинку</value>
+        <value>Выбрать фото</value>
     </data> 
     <data name="ProfilePicture" xml:space="preserve">
         <value>Картинка профайла</value>
@@ -80,5 +80,32 @@
     </data> 
     <data name="InvalidPhoneMessage" xml:space="preserve">
         <value>телефон недействительный</value>
-    </data>                                         
+    </data>  
+     <data name="Management" xml:space="preserve">
+        <value>Управление</value>
+    </data>     
+     <data name="Template" xml:space="preserve">
+        <value>Шаблон</value>
+    </data>
+     <data name="Language" xml:space="preserve">
+        <value>Язык</value>
+    </data>   
+    <data name="NeedsAppRestart" xml:space="preserve">
+        <value>Изменения вступят в силу после перезапуска программы</value>
+    </data> 
+    <data name="English" xml:space="preserve">
+        <value>Английский</value>
+    </data>  
+    <data name="Russian" xml:space="preserve">
+        <value>Русский</value>
+    </data> 
+    <data name="SelectXmlFile" xml:space="preserve">
+        <value>Выбрать XML файл</value>
+    </data> 
+    <data name="SelectHtmlFile" xml:space="preserve">
+        <value>Выбрать HTML файл</value>
+    </data>   
+    <data name="SelectPdfFile" xml:space="preserve">
+        <value>Выбрать PDF файл</value>
+    </data>                                                      
 </root>

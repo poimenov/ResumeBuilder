@@ -57,6 +57,8 @@ let main args =
     builder.Services.AddSingleton<IGeneratePdfService, GeneratePdfService>()
     |> ignore
 
+    builder.Services.AddTransient<IServices, Services>() |> ignore
+
     let application = builder.Build()
     AppDomain.CurrentDomain.SetData("DataDirectory", AppSettings.AppDataPath)
     Environment.SetEnvironmentVariable(DATA_DIRECTORY, AppSettings.AppDataPath)

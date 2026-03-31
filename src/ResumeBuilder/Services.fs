@@ -12,6 +12,9 @@ open PuppeteerSharp
 open PuppeteerSharp.Media
 open RazorLight
 open Fun.Blazor
+open Microsoft.Extensions.Localization
+open Microsoft.Extensions.Options
+open System.Xml.Linq
 
 type SharedResources() = class end
 let emailRegex = Regex("^[^@\s]+@[^@\s]+\.[^@\s]+$", RegexOptions.Compiled)
@@ -29,7 +32,7 @@ let isValidUrl (url: string) =
 
 [<Serializable>]
 type Education
-    (school: string, degree: string, area: string, grade: string, location: string, period: string, website: string) =
+    (school: string, degree: string, area: string, grade: string, location: string, period: string, website: Uri) =
     member val School = school with get, set
     member val Degree = degree with get, set
     member val Area = area with get, set
@@ -71,6 +74,7 @@ type IShareStore with
     member store.Count = store.CreateCVal(nameof store.Count, 0)
     member store.DrawerOpen = store.CreateCVal(nameof store.DrawerOpen, true)
     member store.IsDarkMode = store.CreateCVal(nameof store.IsDarkMode, true)
+    member store.Template = store.CreateCVal(nameof store.Template, "")
     member store.Name = store.CreateCVal(nameof store.Name, "")
     member store.Headline = store.CreateCVal(nameof store.Headline, "")
     member store.Email = store.CreateCVal(nameof store.Email, "")
@@ -173,6 +177,204 @@ type Resume =
       Experiences: Experience list
       Languages: Language list }
 
+type ResumeSerializer =
+    static member FromXml(xmlContent: string) : Resume =
+        let xDoc = XDocument.Parse xmlContent
+
+        let get (el: XElement, name: string) =
+            let e = el.Element(XName.Get name)
+            if isNull e then "" else e.Value
+
+        let picture =
+            let pic = get (xDoc.Root, "Picture")
+
+            if String.IsNullOrEmpty pic then
+                $"{Photino.Blazor.PhotinoWebViewManager.AppBaseUri}images/man-person-icon.svg"
+            else
+                pic
+
+        let links =
+            xDoc.Root.Elements(XName.Get "Links")
+            |> Seq.tryHead
+            |> Option.map (fun el -> el.Elements(XName.Get "Link") |> Seq.map (fun l -> l.Value) |> Seq.toList)
+            |> Option.defaultValue []
+
+        let educations =
+            xDoc.Root.Elements(XName.Get "Educations")
+            |> Seq.tryHead
+            |> Option.map (fun el ->
+                el.Elements(XName.Get "Education")
+                |> Seq.map (fun e ->
+                    Education(
+                        get (e, "School"),
+                        get (e, "Degree"),
+                        get (e, "Area"),
+                        get (e, "Grade"),
+                        get (e, "Location"),
+                        get (e, "Period"),
+                        get (e, "Website") |> Uri
+                    ))
+                |> Seq.toList)
+            |> Option.defaultValue []
+
+        let certifications =
+            xDoc.Root.Elements(XName.Get "Certifications")
+            |> Seq.tryHead
+            |> Option.map (fun el ->
+                el.Elements(XName.Get "Certification")
+                |> Seq.map (fun c ->
+                    Certification(
+                        get (c, "Title"),
+                        get (c, "Issuer"),
+                        get (c, "Date"),
+                        get (c, "Label"),
+                        get (c, "Website") |> Uri
+                    ))
+                |> Seq.toList)
+            |> Option.defaultValue []
+
+        let skills =
+            xDoc.Root.Elements(XName.Get "Skills")
+            |> Seq.tryHead
+            |> Option.map (fun el ->
+                el.Elements(XName.Get "Skill")
+                |> Seq.map (fun s ->
+                    Skill(
+                        get (s, "Name"),
+                        s.Elements(XName.Get "Keywords")
+                        |> Seq.tryHead
+                        |> Option.map (fun k ->
+                            k.Elements(XName.Get "Keyword") |> Seq.map (fun kw -> kw.Value) |> Seq.toList)
+                        |> Option.defaultValue []
+                    ))
+                |> Seq.toList)
+            |> Option.defaultValue []
+
+        let experiences =
+            xDoc.Root.Elements(XName.Get "Experiences")
+            |> Seq.tryHead
+            |> Option.map (fun el ->
+                el.Elements(XName.Get "Experience")
+                |> Seq.map (fun e ->
+                    Experience(
+                        get (e, "Company"),
+                        get (e, "Website") |> Uri,
+                        get (e, "Position"),
+                        get (e, "Location"),
+                        get (e, "Period"),
+                        get (e, "Description")
+                    ))
+                |> Seq.toList)
+            |> Option.defaultValue []
+
+        let languages =
+            xDoc.Root.Elements(XName.Get "Languages")
+            |> Seq.tryHead
+            |> Option.map (fun el ->
+                el.Elements(XName.Get "Language")
+                |> Seq.map (fun l -> Language(get (l, "Name"), get (l, "Fluency"), get (l, "Level") |> int))
+                |> Seq.toList)
+            |> Option.defaultValue []
+
+        { Name = get (xDoc.Root, "Name")
+          Picture = picture
+          Headline = get (xDoc.Root, "Headline")
+          Email = get (xDoc.Root, "Email")
+          Phone = get (xDoc.Root, "Phone")
+          Location = get (xDoc.Root, "Location")
+          Summary = get (xDoc.Root, "Summary")
+          Links = links
+          Educations = educations
+          Certifications = certifications
+          Skills = skills
+          Experiences = experiences
+          Languages = languages }
+
+
+    static member ToXml(resume: Resume) : string =
+        let xDoc =
+            XDocument(
+                XElement(
+                    XName.Get "Resume",
+                    XElement(XName.Get "Name", resume.Name),
+                    XElement(XName.Get "Picture", resume.Picture),
+                    XElement(XName.Get "Headline", resume.Headline),
+                    XElement(XName.Get "Email", resume.Email),
+                    XElement(XName.Get "Phone", resume.Phone),
+                    XElement(XName.Get "Location", resume.Location),
+                    XElement(XName.Get "Summary", resume.Summary),
+                    XElement(XName.Get "Links", resume.Links |> List.map (fun link -> XElement(XName.Get "Link", link))),
+                    XElement(
+                        XName.Get "Educations",
+                        resume.Educations
+                        |> List.map (fun edu ->
+                            XElement(
+                                XName.Get "Education",
+                                XElement(XName.Get "School", edu.School),
+                                XElement(XName.Get "Degree", edu.Degree),
+                                XElement(XName.Get "Area", edu.Area),
+                                XElement(XName.Get "Grade", edu.Grade),
+                                XElement(XName.Get "Location", edu.Location),
+                                XElement(XName.Get "Period", edu.Period),
+                                XElement(XName.Get "Website", edu.Website.ToString())
+                            ))
+                    ),
+                    XElement(
+                        XName.Get "Certifications",
+                        resume.Certifications
+                        |> List.map (fun cert ->
+                            XElement(
+                                XName.Get "Certification",
+                                XElement(XName.Get "Title", cert.Title),
+                                XElement(XName.Get "Issuer", cert.Issuer),
+                                XElement(XName.Get "Date", cert.Date),
+                                XElement(XName.Get "Label", cert.Label),
+                                XElement(XName.Get "Website", cert.Website.ToString())
+                            ))
+                    ),
+                    XElement(
+                        XName.Get "Skills",
+                        resume.Skills
+                        |> List.map (fun skill ->
+                            XElement(
+                                XName.Get "Skill",
+                                XElement(XName.Get "Name", skill.Name),
+                                XElement(
+                                    XName.Get "Keywords",
+                                    skill.Keywords |> List.map (fun kw -> XElement(XName.Get "Keyword", kw))
+                                )
+                            ))
+                    ),
+                    XElement(
+                        XName.Get "Experiences",
+                        resume.Experiences
+                        |> List.map (fun exp ->
+                            XElement(
+                                XName.Get "Experience",
+                                XElement(XName.Get "Company", exp.Company),
+                                XElement(XName.Get "Website", exp.Website.ToString()),
+                                XElement(XName.Get "Position", exp.Position),
+                                XElement(XName.Get "Location", exp.Location),
+                                XElement(XName.Get "Period", exp.Period),
+                                XElement(XName.Get "Description", exp.Description)
+                            ))
+                    ),
+                    XElement(
+                        XName.Get "Languages",
+                        resume.Languages
+                        |> List.map (fun lang ->
+                            XElement(
+                                XName.Get "Language",
+                                XElement(XName.Get "Name", lang.Name),
+                                XElement(XName.Get "Fluency", lang.Fluency),
+                                XElement(XName.Get "Level", lang.Level.ToString())
+                            ))
+                    )
+                )
+            )
+
+        xDoc.ToString()
+
 type IRazorEngineService =
     abstract member RenderAsync: key: string * model: Resume -> Task<string>
     abstract member Render: key: string * model: Resume -> string
@@ -232,6 +434,9 @@ type IOpenDialogService =
         ?title: string * ?defaultPath: string * ?multiSelect: bool * ?filters: struct (string * string array) array ->
             Task<string array>
 
+    abstract member SaveFileAsync:
+        ?title: string * ?defaultName: string * ?filters: struct (string * string array) array -> Task<string>
+
     abstract member OpenFolderAsync: ?title: string * ?defaultPath: string * ?multiSelect: bool -> Task<string array>
 
 type OpenDialogService(app: Photino.Blazor.PhotinoBlazorApp) =
@@ -244,9 +449,40 @@ type OpenDialogService(app: Photino.Blazor.PhotinoBlazorApp) =
                 Option.toObj filters
             )
 
+        member this.SaveFileAsync(title, defaultName, filters) =
+            app.MainWindow.ShowSaveFileAsync(Option.toObj title, Option.toObj defaultName, Option.toObj filters)
+
         member this.OpenFolderAsync(title, defaultPath, multiSelect) =
             app.MainWindow.ShowOpenFolderAsync(
                 Option.toObj title,
                 Option.toObj defaultPath,
                 Option.defaultValue false multiSelect
             )
+
+type IServices =
+    abstract member LinkOpeningService: ILinkOpeningService
+    abstract member RazorEngineService: IRazorEngineService
+    abstract member GeneratePdfService: IGeneratePdfService
+    abstract member OpenDialogService: IOpenDialogService
+    abstract member Localizer: IStringLocalizer<SharedResources>
+    abstract member Options: IOptions<AppSettings>
+    abstract member Store: IShareStore
+
+type Services
+    (
+        linkOpeningService: ILinkOpeningService,
+        razorEngineService: IRazorEngineService,
+        generatePdfService: IGeneratePdfService,
+        openDialogService: IOpenDialogService,
+        localizer: IStringLocalizer<SharedResources>,
+        options: IOptions<AppSettings>,
+        store: IShareStore
+    ) =
+    interface IServices with
+        member _.LinkOpeningService = linkOpeningService
+        member _.RazorEngineService = razorEngineService
+        member _.GeneratePdfService = generatePdfService
+        member _.OpenDialogService = openDialogService
+        member _.Localizer = localizer
+        member _.Options = options
+        member _.Store = store
