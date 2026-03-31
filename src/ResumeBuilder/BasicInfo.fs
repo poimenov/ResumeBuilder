@@ -9,8 +9,6 @@ open Microsoft.Extensions.Localization
 open Fun.Blazor
 
 let getPictureSource (path: string) : string =
-    let defaultPicture = "images/man-person-icon.svg"
-
     if String.IsNullOrWhiteSpace path then
         defaultPicture
     else
@@ -30,7 +28,7 @@ let getPictureSource (path: string) : string =
                     | ".bmp" -> "image/bmp"
                     | _ -> "application/octet-stream"
 
-                let base64 = Convert.ToBase64String(bytes)
+                let base64 = Convert.ToBase64String bytes
                 sprintf "data:%s;base64,%s" mime base64
             else
                 defaultPicture

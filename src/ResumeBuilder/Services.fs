@@ -20,6 +20,17 @@ type SharedResources() = class end
 let emailRegex = Regex("^[^@\s]+@[^@\s]+\.[^@\s]+$", RegexOptions.Compiled)
 let phoneRegex = Regex("^\+?[0-9\s\-()]+$", RegexOptions.Compiled)
 
+let defaultPicture =
+    let path =
+        Path.Combine(AppSettings.WwwRootFolderPath, "images", "man-person-icon.svg")
+
+    if File.Exists path then
+        let base64 = Convert.ToBase64String(File.ReadAllBytes path)
+        $"data:image/svg+xml;base64,{base64}"
+
+    else
+        "data:image/svg+xml;base64,PHN2ZyBpZD0nTGF5ZXJfMScgZGF0YS1uYW1lPSdMYXllciAxJyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAxMjAuOTIgMTIyLjg4Jz48ZGVmcz48c3R5bGU+LmNscy0xe2ZpbGwtcnVsZTpldmVub2RkO308L3N0eWxlPjwvZGVmcz48dGl0bGU+bWFuLXBlcnNvbjwvdGl0bGU+PHBhdGggY2xhc3M9J2Nscy0xJyBkPSdNNzAuNDMsNDYuOTJhMi42NCwyLjY0LDAsMSwxLTIuNjQsMi42NCwyLjY0LDIuNjQsMCwwLDEsMi42NC0yLjY0Wm0zLjQzLDI3LjgxYzQuMDgtMy44Myw3LjA5LTYuNjYsNi41MS0xMy41NGgwYTEuNjIsMS42MiwwLDAsMSwuMjYtMSwxLjU5LDEuNTksMCwwLDEsMi4yMS0uNDQsNC4zOSw0LjM5LDAsMCwwLC44My40MywyLjQyLDIuNDIsMCwwLDAsLjcuMTYsMy4xMSwzLjExLDAsMCwwLC42OSwwLDMuNDEsMy40MSwwLDAsMCwuMy0uNzRsMi01Ljc0Yy4zNi0xLjM2LjU4LTIuODgtMS4yNC0yLjc0YTUuNjQsNS42NCwwLDAsMC0yLjgzLDEuMTgsMS42MiwxLjYyLDAsMCwxLTEuMjUuMzIsMS41OSwxLjU5LDAsMCwxLTEuMy0xLjg0YzEuNS04Ljc1LjgxLTE0LjQ2LTEtMTguMzVhMTUuNjksMTUuNjksMCwwLDAtNy4wNy03QzY2LjM4LDMwLjIxLDYyLDMwLjc2LDU3LjU2LDMxLjNjLTMuNjQuNDUtNy4yNy45LTEyLjA5LDQuMjNhMTEuNjMsMTEuNjMsMCwwLDAtNC41OSw1Ljc0LDE0LjQxLDE0LjQxLDAsMCwwLS4xOSw3Ljg1LDEuNjMsMS42MywwLDAsMSwwLDEsMS42LDEuNiwwLDAsMS0yLDFsLS4yMy0uMDgtMS4yMy0uNDRjLTEuODgtLjY2LTMuMjItMS0zLjczLjIxLS4yNSwyLjQ0LS4yNCw4LDIuMDYsOS4zNWExLjc1LDEuNzUsMCwwLDAsLjkuMjMsNC4xOSw0LjE5LDAsMCwwLDEuMy0uMjEsMS44NiwxLjg2LDAsMCwxLC40OC0uMDksMS41OSwxLjU5LDAsMCwxLDEuNjIsMS41NWMuMTgsNy4yMSwzLjM4LDEwLDcuMjcsMTMuMzIuNTkuNTEsMS4yMSwxLDEuNjIsMS40MSw3LjM5LDYuNTcsMTYuNCw2LjkyLDIzLjU0LDBsMS42NS0xLjU2Wk01Ny43NCw2Mi42OGExLjIsMS4yLDAsMCwxLS40MS0uNzksMS4xNSwxLjE1LDAsMCwxLC4yNy0uODQsMS4xNywxLjE3LDAsMCwxLC44LS40MiwxLjE1LDEuMTUsMCwwLDEsLjg0LjI3LDEuODUsMS44NSwwLDAsMCwyLjQyLDAsMS4xNiwxLjE2LDAsMCwxLC44Ny0uMjgsMS4xOSwxLjE5LDAsMCwxLC43Ny40bC4wNSwwYTEuMjEsMS4yMSwwLDAsMSwuMjQuODMsMS4xOSwxLjE5LDAsMCwxLS40Mi43OSw0LjE4LDQuMTgsMCwwLDEtNS40MSwwWk0yNS45LDIxLjg4QzQyLDIuMDUsNjAuNDUtOC43Myw3NC4zNCw4LjkxYzE2Ljc0Ljg4LDIzLjQ1LDI3LjQ3LDEwLjEsMzguNjYsMCwuMjIsMCwuNDQtLjA4LjY2YTcuNDMsNy40MywwLDAsMSwxLjU1LS4zLDUsNSwwLDAsMSwyLjczLjUyLDMuODYsMy44NiwwLDAsMSwxLjksMi4zMSw3LDcsMCwwLDEtLjA5LDQsMS40MiwxLjQyLDAsMCwxLDAsLjE2bC0yLDUuNzZBNC4yNCw0LjI0LDAsMCwxLDg3LDYyLjgyYTMuOTMsMy45MywwLDAsMS0yLjgzLjY5bC0uNTgtLjA3QzgzLjUsNzAsODAuMjgsNzMuMDcsNzYuMDYsNzcsNzkuMzYsODguMjEsODcuMzUsOTAsOTUuMTMsOTEuNjRjMTAuNjgsMi4zMywyNS43OSwyLjYzLDI1Ljc5LDI0LjQzdjUuMjJhMS41OSwxLjU5LDAsMCwxLTEuNTksMS41OUgxLjU5QTEuNTksMS41OSwwLDAsMSwwLDEyMS4yOXYtNC43MUMwLDkzLjc5LDE1LjgyLDk0LjA5LDI3LjEsOTIuNGM4LjEzLTEuMjIsMTYuNDEtMi40NiwxOS42My0xMy42LS41OS0uNTEtMS4xNy0xLTEuNzctMS41NC00LjEzLTMuNTYtNy41OS02LjU0LTguMjUtMTMuOGgtLjM3YTQuOTEsNC45MSwwLDAsMS0yLjQzLS42NCw2LjY5LDYuNjksMCwwLDEtMi42OC0zLjI1LDE0LjgsMTQuOCwwLDAsMS0xLjA3LTQuODhjMC0uNTEsMC0xLjUyLDAtMi40OWEyMCwyMCwwLDAsMSwuMTMtMi4xLDEuMjYsMS4yNiwwLDAsMSwuMS0uMzhjLjg3LTIuNDIsMi4yLTMuMiwzLjk0LTMuMTVsLTEuMTUtLjc3QzMyLjU2LDM4LDM0LjM5LDI0LjQ1LDI1LjksMjEuODhabTI0LjI0LDU5LjlhOS4zMyw5LjMzLDAsMCwxLS44NC0uNTVjLTIuMTcsNi4yOC01Ljc2LDkuNTYtMTAsMTEuNDZBMzksMzksMCwwLDAsNjAuOCw5OC4zMiwzNy40OCwzNy40OCwwLDAsMCw4Mi41OCw5MC45Yy0zLjcyLTIuMS02LjkxLTUuNC05LTExLjE0LTYuMjcsNS43My0xNi4yOCw2LjQxLTIzLjQ3LDJabS4zNC0zNC44NmEyLjY0LDIuNjQsMCwxLDEtMi42NCwyLjY0LDIuNjQsMi42NCwwLDAsMSwyLjY0LTIuNjRaTTUxLjksNjYuNTlINjhjMS40OS0uMDYsMS44OC43MywxLjM4LDEuODItNC4zMSw5LjcyLTE4LjUsNC45My0xOC42OS0uMTMsMC0uNzUuMzYtMS42MywxLjItMS42OVptMjQuNTMtMjFBMS4xNSwxLjE1LDAsMSwxLDc0LjYsNDdhNS4xMyw1LjEzLDAsMCwwLTIuOTQtMi4xMiw2LjIsNi4yLDAsMCwwLTMuMzkuMzFBMS4xNSwxLjE1LDAsMSwxLDY3LjU0LDQzYzMuNTgtMS4yMSw2LjU4LS40Niw4Ljg5LDIuNjFaTTUzLjM4LDQzYTEuMTQsMS4xNCwwLDEsMS0uNzIsMi4xNyw2LjEyLDYuMTIsMCwwLDAtMy40LS4zQTUuMTksNS4xOSwwLDAsMCw0Ni4zMiw0N2ExLjE0LDEuMTQsMCwxLDEtMS44My0xLjM3YzIuMzEtMy4wOSw1LjMzLTMuODIsOC44OS0yLjYxWm0tLjI0LDI1LjEyaDE0Yy0xLjEzLDMuMzgtMTIuNzIsMy4zMS0xNCwwWicvPjwvc3ZnPg=="
+
 let isValidUrl (url: string) =
     try
         let uri = new Uri(url)
@@ -82,11 +93,7 @@ type IShareStore with
     member store.Location = store.CreateCVal(nameof store.Location, "")
     member store.Summary = store.CreateCVal(nameof store.Summary, "")
 
-    member store.Picture =
-        store.CreateCVal(
-            nameof store.Picture,
-            $"{Photino.Blazor.PhotinoWebViewManager.AppBaseUri}images/man-person-icon.svg"
-        )
+    member store.Picture = store.CreateCVal(nameof store.Picture, defaultPicture)
 
     member store.Links = store.CreateCVal(nameof store.Links, list<string>.Empty)
 
@@ -148,7 +155,7 @@ type ILinkOpeningService =
     abstract member OpenUrl: url: string -> unit
 
 type LinkOpeningService
-    (platformService: IPlatformService, processService: IProcessService, logger: ILogger<LinkOpeningService>) =
+    (platformService: IPlatformService, processService: IProcessService, logger: ILogger<ILinkOpeningService>) =
     interface ILinkOpeningService with
         member _.OpenUrl url =
             try
@@ -377,20 +384,21 @@ type ResumeSerializer =
 
 type IRazorEngineService =
     abstract member RenderAsync: key: string * model: Resume -> Task<string>
-    abstract member Render: key: string * model: Resume -> string
     abstract member GetTemplates: unit -> FileInfo array
 
-type RazorEngineService() =
+type RazorEngineService(logger: ILogger<IRazorEngineService>) =
     let templatesPath = Path.Combine(AppSettings.WwwRootFolderPath, "templates")
 
     let engine =
         (new RazorLightEngineBuilder()).UseFileSystemProject(templatesPath).UseMemoryCachingProvider().Build()
 
     interface IRazorEngineService with
-        member _.RenderAsync(key: string, model: Resume) : Task<string> = engine.CompileRenderAsync(key, model)
-
-        member this.Render(key: string, model: Resume) : string =
-            engine.CompileRenderAsync(key, model).Result
+        member _.RenderAsync(key: string, model: Resume) : Task<string> =
+            try
+                engine.CompileRenderAsync(key, model)
+            with ex ->
+                logger.LogError(ex, $"Error rendering template: {key}")
+                Task.FromResult ""
 
         member _.GetTemplates() : FileInfo array =
             let folder = templatesPath |> DirectoryInfo
@@ -403,30 +411,33 @@ type RazorEngineService() =
 type IGeneratePdfService =
     abstract member CreateAsync: key: string * model: Resume * outputPath: string -> Task<unit>
 
-type GeneratePdfService(razorEngineService: IRazorEngineService) =
+type GeneratePdfService(razorEngineService: IRazorEngineService, logger: ILogger<IGeneratePdfService>) =
     interface IGeneratePdfService with
         member _.CreateAsync(key: string, model: Resume, outputPath: string) : Task<unit> =
             task {
-                let browserFetcher = new BrowserFetcher()
-                let! _installedBrowser = browserFetcher.DownloadAsync()
-                let! htmlContent = razorEngineService.RenderAsync(key, model)
+                try
+                    let browserFetcher = new BrowserFetcher()
+                    let! _installedBrowser = browserFetcher.DownloadAsync()
+                    let! htmlContent = razorEngineService.RenderAsync(key, model)
 
-                let pdfOptions =
-                    PdfOptions(
-                        Format = PaperFormat.A4,
-                        DisplayHeaderFooter = false,
-                        PrintBackground = true,
-                        MarginOptions = new MarginOptions(Top = "0mm", Bottom = "0mm", Left = "0mm", Right = "0mm")
-                    )
+                    let pdfOptions =
+                        PdfOptions(
+                            Format = PaperFormat.A4,
+                            DisplayHeaderFooter = false,
+                            PrintBackground = true,
+                            MarginOptions = new MarginOptions(Top = "0mm", Bottom = "0mm", Left = "0mm", Right = "0mm")
+                        )
 
-                use! browser =
-                    Puppeteer.LaunchAsync(
-                        LaunchOptions(Headless = true, Args = [| "--no-sandbox"; "--disable-setuid-sandbox" |])
-                    )
+                    use! browser =
+                        Puppeteer.LaunchAsync(
+                            LaunchOptions(Headless = true, Args = [| "--no-sandbox"; "--disable-setuid-sandbox" |])
+                        )
 
-                use! page = browser.NewPageAsync()
-                do! page.SetContentAsync htmlContent
-                do! page.PdfAsync(outputPath, pdfOptions)
+                    use! page = browser.NewPageAsync()
+                    do! page.SetContentAsync htmlContent
+                    do! page.PdfAsync(outputPath, pdfOptions)
+                with ex ->
+                    logger.LogError(ex, $"Error generating PDF: {outputPath}")
             }
 
 type IOpenDialogService =
