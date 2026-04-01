@@ -13,6 +13,7 @@
     <Compile Include="AppMenu.fs" />
     <Compile Include="BasicInfo.fs" />
     <Compile Include="Links.fs" />
+    <Compile Include="Summary.fs" />
     <Compile Include="App.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
@@ -39,5 +40,6 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Log4Net.AspNetCore" Version="8.0.0" />
     <PackageReference Include="PuppeteerSharp" Version="24.39.1" />
     <PackageReference Include="RazorLight" Version="2.3.1" />
+    <PackageReference Include="Tizzani.MudBlazor.HtmlEditor" Version="2.3.0" />
   </ItemGroup>
 </Project>

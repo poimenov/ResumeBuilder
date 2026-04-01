@@ -176,6 +176,11 @@
                 padding-left: 24px;
             }
 
+            .section-content ol {
+                margin: 6px 0;
+                padding-left: 24px;
+            }
+
             .section-content li {
                 margin-bottom: 6px;
             }
@@ -283,6 +288,10 @@
                 flex-shrink: 0;
             }
 
+            li[data-list="bullet"] {
+                list-style-type: disc;
+            }
+            
             @@media print {
                 body {
                     padding: 0;
@@ -444,9 +453,7 @@
                     <section class="page-section">
                         <h6>Summary</h6>
                         <div class="section-content">
-                            <div class="_tiptap_content_11g7w_1">
-                                @Raw(Model.Summary)
-                            </div>
+                            @Raw(Model.Summary)
                         </div>
                     </section>
                     <section class="page-section">
@@ -479,9 +486,7 @@
                                             </div>
                                         </div>
                                         <div class="section-item-description">
-                                            <div class="_tiptap_content_11g7w_1">
-                                                @Raw(experience.Description)
-                                            </div>
+                                            @Raw(experience.Description)
                                         </div>
                                     </div>
                                 </div>

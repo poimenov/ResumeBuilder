@@ -13,44 +13,43 @@ open Fun.Blazor.Router
 open Microsoft.JSInterop
 
 let appHeader =
-    html.inject
-        (fun (services: IServices) ->
-            MudAppBar'' {
-                Elevation 1
+    html.inject (fun (services: IServices) ->
+        MudAppBar'' {
+            Elevation 1
+
+            MudIconButton'' {
+                Icon Icons.Material.Filled.Menu
+                Color Color.Inherit
+                Edge Edge.Start
+                onclick (fun _ -> services.Store.DrawerOpen.Publish not)
+            }
+
+            MudText'' {
+                Typo Typo.h5
+                class' "ml-3"
+                AppSettings.ApplicationName
+            }
+
+            MudSpacer''
+
+            adapt {
+                let! isDarkMode = services.Store.IsDarkMode
+
+                let darkLightModeButtonIcon =
+                    if isDarkMode then
+                        Icons.Material.Rounded.AutoMode
+                    else
+                        Icons.Material.Outlined.DarkMode
 
                 MudIconButton'' {
-                    Icon Icons.Material.Filled.Menu
+                    Icon darkLightModeButtonIcon
                     Color Color.Inherit
-                    Edge Edge.Start
-                    onclick (fun _ -> services.Store.DrawerOpen.Publish not)
+                    onclick (fun _ -> services.Store.IsDarkMode.Publish(not services.Store.IsDarkMode.Value))
                 }
 
-                MudText'' {
-                    Typo Typo.h5
-                    class' "ml-3"
-                    AppSettings.ApplicationName
-                }
-
-                MudSpacer''
-
-                adapt {
-                    let! isDarkMode = services.Store.IsDarkMode
-
-                    let darkLightModeButtonIcon =
-                        if isDarkMode then
-                            Icons.Material.Rounded.AutoMode
-                        else
-                            Icons.Material.Outlined.DarkMode
-
-                    MudIconButton'' {
-                        Icon darkLightModeButtonIcon
-                        Color Color.Inherit
-                        onclick (fun _ -> services.Store.IsDarkMode.Publish(not services.Store.IsDarkMode.Value))
-                    }
-
-                    appMenu services
-                }
-            })
+                appMenu services
+            }
+        })
 
 let navmenus =
     html.injectWithNoKey (fun (store: IShareStore, localizer: IStringLocalizer<SharedResources>) ->
@@ -59,6 +58,7 @@ let navmenus =
 
             MudDrawer'' {
                 Open' drawerOpen
+                Width "150px"
                 Elevation 2
                 ClipMode DrawerClipMode.Always
 
@@ -77,12 +77,23 @@ let navmenus =
                         Icon Icons.Material.Filled.Link
                         localizer["Links"]
                     }
+
+                    MudNavLink'' {
+                        Href "/summary"
+                        Match NavLinkMatch.All
+                        Icon Icons.Material.Filled.Description
+                        localizer["Summary"]
+                    }
                 }
             }
 
         })
 
-let routes = html.route [| routeCi "/links" linksPage; routeAny basicInfoPage |]
+let routes =
+    html.route
+        [| routeCi "/links" linksPage
+           routeCi "/summary" summaryPage
+           routeAny basicInfoPage |]
 
 let mudTheme =
     let theme = new MudTheme()
