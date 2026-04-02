@@ -1,0 +1,13 @@
+<div class="html-editor html-content-wrapper @(Outlined ? "is-outlined" : "")" @attributes="UserAttributes">
+    <div @ref="_toolbar">
+        @if (ChildContent is null)
+        {
+            <MudHtmlToolbarOptions />
+        }
+        else
+        {
+            @ChildContent
+        }
+    </div>
+    <div class="@(Resizable ? "is-resizable" : "")" @ref="_editor"></div>
+</div>

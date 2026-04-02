@@ -1,3 +1,4 @@
 ﻿<Solution>
+  <Project Path="src/Tizzani.MudBlazor.HtmlEditor/Tizzani.MudBlazor.HtmlEditor.csproj" />
   <Project Path="src/ResumeBuilder/ResumeBuilder.fsproj" />
 </Solution>

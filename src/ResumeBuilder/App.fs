@@ -84,6 +84,13 @@ let navmenus =
                         Icon Icons.Material.Filled.Description
                         localizer["Summary"]
                     }
+
+                    MudNavLink'' {
+                        Href "/experience"
+                        Match NavLinkMatch.All
+                        Icon Icons.Material.Filled.Work
+                        localizer["Experiences"]
+                    }
                 }
             }
 
@@ -93,6 +100,7 @@ let routes =
     html.route
         [| routeCi "/links" linksPage
            routeCi "/summary" summaryPage
+           routeCi "/experience" experiencePage
            routeAny basicInfoPage |]
 
 let mudTheme =

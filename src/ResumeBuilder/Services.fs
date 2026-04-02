@@ -15,6 +15,8 @@ open Fun.Blazor
 open Microsoft.Extensions.Localization
 open Microsoft.Extensions.Options
 open System.Xml.Linq
+open Tizzani.MudBlazor.HtmlEditor
+open Microsoft.AspNetCore.Components
 
 type SharedResources() = class end
 let emailRegex = Regex("^[^@\s]+@[^@\s]+\.[^@\s]+$", RegexOptions.Compiled)
@@ -40,6 +42,30 @@ let isValidUrl (url: string) =
     with
     | :? UriFormatException -> false
     | _ -> false
+
+
+type MudHtmlToolbarOptions with
+    static member create() =
+        html.blazor (
+            ComponentAttrBuilder<MudHtmlToolbarOptions>()
+                .Add((fun c -> c.BackgroundColorPicker), false)
+                .Add((fun c -> c.ForegroundColorPicker), false)
+                .Add((fun c -> c.InsertImage), false)
+                .Add((fun c -> c.TypographyPicker), false)
+                .Add((fun c -> c.Align), false)
+                .Add((fun c -> c.Indent), false)
+                .Add((fun c -> c.Blockquote), false)
+                .Add((fun c -> c.CodeBlock), false)
+        )
+
+type MudHtmlEditor with
+    static member create(value, onValueChanged) =
+        html.blazor<MudHtmlEditor> (
+            ComponentAttrBuilder<MudHtmlEditor>()
+                .Add((fun x -> x.Html), value)
+                .Add((fun x -> x.HtmlChanged), EventCallback<string>(null, Action<string> onValueChanged))
+                .Add((fun x -> x.ChildContent), MudHtmlToolbarOptions.create () |> html.renderFragment)
+        )
 
 [<Serializable>]
 type Education
