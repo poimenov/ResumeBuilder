@@ -44,7 +44,7 @@ let appMenu (services: IServices) =
     MudMenu'' {
         label' (string (services.Localizer["Settings"]))
         StartIcon Icons.Material.Filled.Settings
-        style' "width: 130px"
+        style' "width: 145px"
         RelativeWidth DropdownWidth.Relative
         AnchorOrigin Origin.BottomLeft
         TransformOrigin Origin.BottomLeft

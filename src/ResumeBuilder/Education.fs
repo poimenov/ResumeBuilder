@@ -73,49 +73,49 @@ let educationPage =
                     }
 
                     MudTextField''<string> {
-                        label' "School"
+                        label' (string (localizer["School"]))
                         Variant Variant.Text
                         Value'(getSchool, setSchool)
                         Immediate true
                     }
 
                     MudTextField''<string> {
-                        label' "Degree"
+                        label' (string (localizer["Degree"]))
                         Variant Variant.Text
                         Value'(getDegree, setDegree)
                         Immediate true
                     }
 
                     MudTextField''<string> {
-                        label' "Area"
+                        label' (string (localizer["Area"]))
                         Variant Variant.Text
                         Value'(getArea, setArea)
                         Immediate true
                     }
 
                     MudTextField''<string> {
-                        label' "Grade"
+                        label' (string (localizer["Grade"]))
                         Variant Variant.Text
                         Value'(getGrade, setGrade)
                         Immediate true
                     }
 
                     MudTextField''<string> {
-                        label' "Location"
+                        label' (string (localizer["Location"]))
                         Variant Variant.Text
                         Value'(getLocation, setLocation)
                         Immediate true
                     }
 
                     MudTextField''<string> {
-                        label' "Period"
+                        label' (string (localizer["Period"]))
                         Variant Variant.Text
                         Value'(getPeriod, setPeriod)
                         Immediate true
                     }
 
                     MudTextField''<string> {
-                        label' "Website"
+                        label' (string (localizer["Website"]))
                         Variant Variant.Text
                         Value'(getWebsite, setWebsite)
                         Immediate true

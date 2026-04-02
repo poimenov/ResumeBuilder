@@ -8,7 +8,10 @@
     </data> 
     <data name="Links" xml:space="preserve">
         <value>Ссылки</value>
-    </data>              
+    </data> 
+    <data name="Link" xml:space="preserve">
+        <value>Ссылка</value>
+    </data>                    
     <data name="Summary" xml:space="preserve">
         <value>Резюме</value>
     </data>  
@@ -132,7 +135,13 @@
     <data name="School" xml:space="preserve">
         <value>Школа</value>
     </data>
-    <data name="Location" xml:space="preserve">
-        <value>Местоположение</value>
-    </data>                                                        
+    <data name="Settings" xml:space="preserve">
+        <value>Настройки</value>
+    </data> 
+    <data name="Description" xml:space="preserve">
+        <value>Описание</value>
+    </data> 
+    <data name="HtmlPlaceholder" xml:space="preserve">
+        <value>Расскажите свою историю...</value>
+    </data>                                                                 
 </root>

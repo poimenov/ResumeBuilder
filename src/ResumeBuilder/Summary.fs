@@ -15,8 +15,8 @@ let summaryPage =
             }
 
             adapt {
-                let! summary = store.Summary.WithSetter()
+                let! getSummary, setSummary = store.Summary.WithSetter()
 
-                MudHtmlEditor.create summary
+                MudHtmlEditor.create (getSummary, setSummary, string (localizer["HtmlPlaceholder"]))
             }
         })

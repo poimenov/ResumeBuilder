@@ -114,7 +114,7 @@ let experiencePage =
                         localizer["Description"]
                     }
 
-                    MudHtmlEditor.create (getDescription, setDescription)
+                    MudHtmlEditor.create (getDescription, setDescription, string (localizer["HtmlPlaceholder"]))
 
                     MudDivider'' { style' "margin: 5px 0px 5px 0px;" }
 

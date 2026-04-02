@@ -8,7 +8,10 @@
     </data>      
     <data name="Links" xml:space="preserve">
         <value>Links</value>
-    </data>      
+    </data>   
+    <data name="Link" xml:space="preserve">
+        <value>Link</value>
+    </data>        
     <data name="Summary" xml:space="preserve">
         <value>Summary</value>
     </data>  
@@ -132,8 +135,13 @@
     <data name="School" xml:space="preserve">
         <value>School</value>
     </data>
-    <data name="Location" xml:space="preserve">
-        <value>Location</value>
+    <data name="Settings" xml:space="preserve">
+        <value>Settings</value>
     </data>
-                                
+    <data name="Description" xml:space="preserve">
+        <value>Description</value>
+    </data>
+    <data name="HtmlPlaceholder" xml:space="preserve">
+        <value>Tell your story...</value>
+    </data>
 </root>

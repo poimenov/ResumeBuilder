@@ -53,7 +53,7 @@ let linksPage =
                     }
 
                     MudTextField''<string> {
-                        label' "Link"
+                        label' (string (localizer["Link"]))
                         Variant Variant.Text
                         Value'(getLink, setLink)
                         Immediate true

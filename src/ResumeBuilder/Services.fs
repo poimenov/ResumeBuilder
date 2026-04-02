@@ -59,9 +59,10 @@ type MudHtmlToolbarOptions with
         )
 
 type MudHtmlEditor with
-    static member create(value, onValueChanged) =
+    static member create(value, onValueChanged, placeholder) =
         html.blazor<MudHtmlEditor> (
             ComponentAttrBuilder<MudHtmlEditor>()
+                .Add((fun x -> x.Placeholder), placeholder)
                 .Add((fun x -> x.Html), value)
                 .Add((fun x -> x.HtmlChanged), EventCallback<string>(null, Action<string> onValueChanged))
                 .Add((fun x -> x.ChildContent), MudHtmlToolbarOptions.create () |> html.renderFragment)

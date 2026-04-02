@@ -55,7 +55,7 @@ let navmenus =
 
             MudDrawer'' {
                 Open' drawerOpen
-                Width "150px"
+                Width "160px"
                 Elevation 2
                 ClipMode DrawerClipMode.Always
 
