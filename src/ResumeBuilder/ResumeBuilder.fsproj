@@ -15,6 +15,7 @@
     <Compile Include="Links.fs" />
     <Compile Include="Summary.fs" />  
     <Compile Include="Experience.fs" />
+    <Compile Include="Education.fs" />
     <Compile Include="App.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>

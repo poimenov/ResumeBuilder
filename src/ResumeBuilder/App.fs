@@ -1,13 +1,10 @@
 [<AutoOpen>]
 module ResumeBuilder.App
 
-open System
-open Microsoft.AspNetCore.Components
 open Microsoft.AspNetCore.Components.Web
 open Microsoft.AspNetCore.Components.Routing
 open MudBlazor
 open Microsoft.Extensions.Localization
-open Microsoft.Extensions.Options
 open Fun.Blazor
 open Fun.Blazor.Router
 open Microsoft.JSInterop
@@ -91,6 +88,13 @@ let navmenus =
                         Icon Icons.Material.Filled.Work
                         localizer["Experiences"]
                     }
+
+                    MudNavLink'' {
+                        Href "/education"
+                        Match NavLinkMatch.All
+                        Icon Icons.Material.Filled.School
+                        localizer["Educations"]
+                    }
                 }
             }
 
@@ -101,6 +105,7 @@ let routes =
         [| routeCi "/links" linksPage
            routeCi "/summary" summaryPage
            routeCi "/experience" experiencePage
+           routeCi "/education" educationPage
            routeAny basicInfoPage |]
 
 let mudTheme =

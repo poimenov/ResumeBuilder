@@ -107,5 +107,33 @@
     </data>   
     <data name="SelectPdfFile" xml:space="preserve">
         <value>Select PDF File</value>
-    </data>                                                
+    </data>  
+    <data name="Company" xml:space="preserve">
+        <value>Company</value>
+    </data> 
+    <data name="Position" xml:space="preserve">
+        <value>Position</value>
+    </data> 
+    <data name="Period" xml:space="preserve">
+        <value>Period</value>
+    </data> 
+    <data name="Website" xml:space="preserve">
+        <value>Website</value>
+    </data> 
+    <data name="Degree" xml:space="preserve">
+        <value>Degree</value>
+    </data> 
+    <data name="Area" xml:space="preserve">
+        <value>Area</value>
+    </data> 
+    <data name="Grade" xml:space="preserve">
+        <value>Grade</value>
+    </data>
+    <data name="School" xml:space="preserve">
+        <value>School</value>
+    </data>
+    <data name="Location" xml:space="preserve">
+        <value>Location</value>
+    </data>
+                                
 </root>

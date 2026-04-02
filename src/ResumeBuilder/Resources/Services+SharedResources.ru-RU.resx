@@ -107,5 +107,32 @@
     </data>   
     <data name="SelectPdfFile" xml:space="preserve">
         <value>Выбрать PDF файл</value>
-    </data>                                                      
+    </data>  
+    <data name="Company" xml:space="preserve">
+        <value>Компания</value>
+    </data> 
+    <data name="Position" xml:space="preserve">
+        <value>Должность</value>
+    </data> 
+    <data name="Period" xml:space="preserve">
+        <value>Период</value>
+    </data> 
+    <data name="Website" xml:space="preserve">
+        <value>Сайт</value>
+    </data> 
+    <data name="Degree" xml:space="preserve">
+        <value>Степень</value>
+    </data> 
+    <data name="Area" xml:space="preserve">
+        <value>Область</value>
+    </data> 
+    <data name="Grade" xml:space="preserve">
+        <value>Квалификация</value>
+    </data>
+    <data name="School" xml:space="preserve">
+        <value>Школа</value>
+    </data>
+    <data name="Location" xml:space="preserve">
+        <value>Местоположение</value>
+    </data>                                                        
 </root>

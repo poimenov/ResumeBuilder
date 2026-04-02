@@ -126,13 +126,21 @@ let experiencePage =
                             Variant Variant.Filled
                             Color Color.Primary
                             Size Size.Small
-                            Disabled(String.IsNullOrWhiteSpace getCompany || String.IsNullOrWhiteSpace getPosition)
+
+                            Disabled(
+                                String.IsNullOrWhiteSpace getCompany
+                                || String.IsNullOrWhiteSpace getPosition
+                                || String.IsNullOrWhiteSpace getPeriod
+                            )
 
                             OnClick(fun _ ->
                                 let newExperience =
                                     Experience(
                                         getCompany,
-                                        Uri getWebsite,
+                                        (if String.IsNullOrWhiteSpace getWebsite then
+                                             Uri "about:blank"
+                                         else
+                                             Uri getWebsite),
                                         getPosition,
                                         getLocation,
                                         getPeriod,
@@ -191,7 +199,10 @@ let experiencePage =
                                     let updatedExperience =
                                         Experience(
                                             getCompany,
-                                            Uri getWebsite,
+                                            (if String.IsNullOrWhiteSpace getWebsite then
+                                                 Uri "about:blank"
+                                             else
+                                                 Uri getWebsite),
                                             getPosition,
                                             getLocation,
                                             getPeriod,
