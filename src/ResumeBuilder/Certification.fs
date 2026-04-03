@@ -25,7 +25,9 @@ let certificationPage =
                 localizer["Certifications"]
             }
 
-            MudForm'' {
+            MudCard'' {
+                Outlined true
+
                 adapt {
                     let! certifications = store.Certifications
 
@@ -40,85 +42,88 @@ let certificationPage =
                     let! getLabel, setLabel = label.WithSetter()
                     let! getWebsite, setWebsite = website.WithSetter()
 
-                    MudList'' {
-                        type' Certification
-                        SelectedValue'(getSelectedCertification, setSelectedCertification)
+                    MudCardContent'' {
+                        MudList'' {
+                            type' Certification
+                            SelectedValue'(getSelectedCertification, setSelectedCertification)
+                            class' "list"
 
-                        SelectedValueChanged(fun item ->
-                            match item with
-                            | Some cert ->
-                                let indexOption = certifications |> List.tryFindIndex (fun x -> x = cert)
+                            SelectedValueChanged(fun item ->
+                                match item with
+                                | Some cert ->
+                                    let indexOption = certifications |> List.tryFindIndex (fun x -> x = cert)
 
-                                match indexOption with
-                                | Some index ->
-                                    setSelectedCertificationIndex index
-                                    setSelectedCertification item
-                                    setCertification cert
-                                    setTitle cert.Title
-                                    setIssuer cert.Issuer
-                                    setDate cert.Date
-                                    setLabel cert.Label
-                                    setWebsite cert.Website.AbsoluteUri
-                                | None -> ()
-                            | None -> ())
+                                    match indexOption with
+                                    | Some index ->
+                                        setSelectedCertificationIndex index
+                                        setSelectedCertification item
+                                        setCertification cert
+                                        setTitle cert.Title
+                                        setIssuer cert.Issuer
+                                        setDate cert.Date
+                                        setLabel cert.Label
+                                        setWebsite cert.Website.AbsoluteUri
+                                    | None -> ()
+                                | None -> ())
 
-                        certifications
-                        |> List.map (fun cert ->
-                            MudListItem'' {
-                                Value(Some cert)
-                                Text cert.Title
-                            })
+                            certifications
+                            |> List.map (fun cert ->
+                                MudListItem'' {
+                                    class' "list-item"
+                                    Value(Some cert)
+                                    title' cert.Title
+                                    Text cert.Title
+                                })
+
+                        }
+
+                        MudTextField''<string> {
+                            label' (string localizer["Title"])
+                            Variant Variant.Text
+                            Value'(getTitle, setTitle)
+                            Immediate true
+                        }
+
+                        MudTextField''<string> {
+                            label' (string localizer["Issuer"])
+                            Variant Variant.Text
+                            Value'(getIssuer, setIssuer)
+                            Immediate true
+                        }
+
+                        MudTextField''<string> {
+                            label' (string localizer["Date"])
+                            Variant Variant.Text
+                            Value'(getDate, setDate)
+                            Immediate true
+                        }
+
+                        MudTextField''<string> {
+                            label' (string localizer["Label"])
+                            Variant Variant.Text
+                            Value'(getLabel, setLabel)
+                            Immediate true
+                        }
+
+                        MudTextField''<string> {
+                            label' (string localizer["Website"])
+                            Variant Variant.Text
+                            Value'(getWebsite, setWebsite)
+                            Immediate true
+
+                            Validation(
+                                Func<string, string>(fun v ->
+                                    if String.IsNullOrEmpty v || isValidUrl v then
+                                        null
+                                    else
+                                        string (localizer["InvalidUrlMessage"]))
+                            )
+                        }
 
                     }
 
-                    MudTextField''<string> {
-                        label' (string localizer["Title"])
-                        Variant Variant.Text
-                        Value'(getTitle, setTitle)
-                        Immediate true
-                    }
-
-                    MudTextField''<string> {
-                        label' (string localizer["Issuer"])
-                        Variant Variant.Text
-                        Value'(getIssuer, setIssuer)
-                        Immediate true
-                    }
-
-                    MudTextField''<string> {
-                        label' (string localizer["Date"])
-                        Variant Variant.Text
-                        Value'(getDate, setDate)
-                        Immediate true
-                    }
-
-                    MudTextField''<string> {
-                        label' (string localizer["Label"])
-                        Variant Variant.Text
-                        Value'(getLabel, setLabel)
-                        Immediate true
-                    }
-
-                    MudTextField''<string> {
-                        label' (string localizer["Website"])
-                        Variant Variant.Text
-                        Value'(getWebsite, setWebsite)
-                        Immediate true
-
-                        Validation(
-                            Func<string, string>(fun v ->
-                                if String.IsNullOrEmpty v || isValidUrl v then
-                                    null
-                                else
-                                    string (localizer["InvalidUrlMessage"]))
-                        )
-                    }
-
-                    MudDivider'' { style' "margin: 5px 0px 5px 0px;" }
-
-                    MudStack'' {
-                        Row true
-                        Justify Justify.FlexEnd
+                    MudCardActions'' {
+                        class' "card-actions"
 
                         MudButton'' {
                             Variant Variant.Filled

@@ -19,59 +19,65 @@ let linksPage =
                 localizer["Links"]
             }
 
-            MudForm'' {
+            MudCard'' {
+                Outlined true
+
                 adapt {
                     let! links = store.Links
                     let! getSelectedLinkIndex, setSelectedLinkIndex = selectedLinkIndex.WithSetter()
                     let! getSelectedLink, setSelectedLink = selectedLink.WithSetter()
                     let! getLink, setLink = link.WithSetter()
 
-                    MudList'' {
-                        type' (string option)
-                        SelectedValue'(getSelectedLink, setSelectedLink)
+                    MudCardContent'' {
 
-                        SelectedValueChanged(fun item ->
-                            match item with
-                            | Some str ->
-                                let indexOption = links |> List.tryFindIndex (fun x -> x = str)
+                        MudList'' {
+                            type' (string option)
+                            SelectedValue'(getSelectedLink, setSelectedLink)
+                            class' "list"
 
-                                match indexOption with
-                                | Some index ->
-                                    setSelectedLinkIndex index
-                                    setSelectedLink item
-                                    setLink str
-                                | None -> ()
-                            | None -> ())
+                            SelectedValueChanged(fun item ->
+                                match item with
+                                | Some str ->
+                                    let indexOption = links |> List.tryFindIndex (fun x -> x = str)
 
-                        links
-                        |> List.map (fun x ->
-                            MudListItem'' {
-                                Value(Some x)
-                                Text x
-                            })
+                                    match indexOption with
+                                    | Some index ->
+                                        setSelectedLinkIndex index
+                                        setSelectedLink item
+                                        setLink str
+                                    | None -> ()
+                                | None -> ())
+
+                            links
+                            |> List.map (fun x ->
+                                MudListItem'' {
+                                    class' "list-item"
+                                    Value(Some x)
+                                    title' x
+                                    Text x
+                                })
+
+                        }
+
+                        MudTextField''<string> {
+                            label' (string (localizer["Link"]))
+                            Variant Variant.Text
+                            Value'(getLink, setLink)
+                            Immediate true
+
+                            Validation(
+                                Func<string, string>(fun v ->
+                                    if String.IsNullOrEmpty v || isValidUrl v then
+                                        null
+                                    else
+                                        string (localizer["InvalidUrlMessage"]))
+                            )
+                        }
 
                     }
 
-                    MudTextField''<string> {
-                        label' (string (localizer["Link"]))
-                        Variant Variant.Text
-                        Value'(getLink, setLink)
-                        Immediate true
-
-                        Validation(
-                            Func<string, string>(fun v ->
-                                if String.IsNullOrEmpty v || isValidUrl v then
-                                    null
-                                else
-                                    string (localizer["InvalidUrlMessage"]))
-                        )
-                    }
-
-                    MudDivider'' { style' "margin: 5px 0px 5px 0px;" }
-
-                    MudStack'' {
-                        Row true
-                        Justify Justify.FlexEnd
+                    MudCardActions'' {
+                        class' "card-actions"
 
                         MudButton'' {
                             Variant Variant.Filled

@@ -3,8 +3,9 @@ module ResumeBuilder.App
 
 open Microsoft.AspNetCore.Components.Web
 open Microsoft.AspNetCore.Components.Routing
-open MudBlazor
 open Microsoft.Extensions.Localization
+open Microsoft.Extensions.Options
+open MudBlazor
 open Fun.Blazor
 open Fun.Blazor.Router
 open Microsoft.JSInterop
@@ -34,14 +35,19 @@ let appHeader =
 
                 let darkLightModeButtonIcon =
                     if isDarkMode then
-                        Icons.Material.Rounded.AutoMode
+                        Icons.Material.Rounded.LightMode
                     else
                         Icons.Material.Outlined.DarkMode
 
                 MudIconButton'' {
                     Icon darkLightModeButtonIcon
                     Color Color.Inherit
-                    onclick (fun _ -> services.Store.IsDarkMode.Publish(not services.Store.IsDarkMode.Value))
+
+                    onclick (fun _ ->
+                        let newMode = not isDarkMode
+                        services.Store.IsDarkMode.Publish newMode
+                        services.Options.Value.IsDarkMode <- newMode
+                        lock services.Options.Value (fun () -> services.Options.Value.Save()))
                 }
 
                 appMenu services
@@ -164,68 +170,70 @@ let mudTheme =
     theme
 
 let app =
-    html.inject
-        (fun (hook: IComponentHook, store: IShareStore, js: IJSRuntime, localizer: IStringLocalizer<SharedResources>) ->
-            hook.AddFirstAfterRenderTask(fun _ ->
-                task { js.InvokeVoidAsync("split").AsTask() |> Async.AwaitTask |> ignore })
+    html.inject (fun (hook: IComponentHook, store: IShareStore, js: IJSRuntime, settings: IOptions<AppSettings>) ->
+        hook.AddFirstAfterRenderTask(fun _ ->
+            task {
+                store.IsDarkMode.Publish settings.Value.IsDarkMode
+                js.InvokeVoidAsync("split").AsTask() |> Async.AwaitTask |> ignore
+            })
 
-            ErrorBoundary'' {
-                ErrorContent(fun e ->
-                    MudAlert'' {
-                        Severity Severity.Error
-                        string e
-                    })
+        ErrorBoundary'' {
+            ErrorContent(fun e ->
+                MudAlert'' {
+                    Severity Severity.Error
+                    string e
+                })
 
-                adapt {
-                    let! isDarkMode = store.IsDarkMode
+            adapt {
+                let! isDarkMode = store.IsDarkMode
 
-                    MudThemeProvider'' {
-                        Theme mudTheme
-                        IsDarkMode isDarkMode
-                    }
+                MudThemeProvider'' {
+                    Theme mudTheme
+                    IsDarkMode isDarkMode
                 }
+            }
 
-                MudSnackbarProvider''
-                MudPopoverProvider''
-                MudDialogProvider''
+            MudSnackbarProvider''
+            MudPopoverProvider''
+            MudDialogProvider''
 
-                MudLayout'' {
-                    appHeader
-                    navmenus
+            MudLayout'' {
+                appHeader
+                navmenus
 
-                    MudMainContent'' {
-                        MudStack'' {
-                            Row true
-                            Spacing 0
-                            class' "main-stack "
+                MudMainContent'' {
+                    MudStack'' {
+                        Row true
+                        Spacing 0
+                        class' "main-stack "
 
-                            div {
-                                id "left"
+                        div {
+                            id "left"
 
-                                MudText'' {
-                                    Typo Typo.h6
-                                    class' "pa-4"
+                            MudText'' {
+                                Typo Typo.h6
+                                class' "pa-4"
 
-                                    SectionOutlet'' { SectionName "Title" }
-                                }
-
-                                MudContainer'' {
-                                    class' "pa-4"
-                                    routes
-                                }
+                                SectionOutlet'' { SectionName "Title" }
                             }
 
-                            div {
-                                id "right"
-                                iframe { id "targetWindow" }
+                            MudContainer'' {
+                                class' "pa-4"
+                                routes
                             }
-
-                            previewPage
                         }
 
+                        div {
+                            id "right"
+                            iframe { id "targetWindow" }
+                        }
+
+                        previewPage
                     }
+
                 }
-            })
+            }
+        })
 
 type App() =
     inherit FunComponent()

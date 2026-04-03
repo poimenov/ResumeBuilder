@@ -111,7 +111,7 @@ type Certification(title: string, issuer: string, date: string, label: string, w
 type IShareStore with
     member store.Count = store.CreateCVal(nameof store.Count, 0)
     member store.DrawerOpen = store.CreateCVal(nameof store.DrawerOpen, true)
-    member store.IsDarkMode = store.CreateCVal(nameof store.IsDarkMode, true)
+    member store.IsDarkMode = store.CreateCVal(nameof store.IsDarkMode, false)
     member store.Template = store.CreateCVal(nameof store.Template, "")
     member store.Name = store.CreateCVal(nameof store.Name, "")
     member store.Headline = store.CreateCVal(nameof store.Headline, "")

@@ -14,9 +14,16 @@ let summaryPage =
                 localizer["Summary"]
             }
 
-            adapt {
-                let! getSummary, setSummary = store.Summary.WithSetter()
+            MudCard'' {
+                Outlined true
 
-                MudHtmlEditor.create (getSummary, setSummary, string (localizer["HtmlPlaceholder"]))
+                MudCardContent'' {
+
+                    adapt {
+                        let! getSummary, setSummary = store.Summary.WithSetter()
+
+                        MudHtmlEditor.create (getSummary, setSummary, string (localizer["HtmlPlaceholder"]))
+                    }
+                }
             }
         })

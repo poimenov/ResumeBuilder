@@ -26,7 +26,9 @@ let experiencePage =
                 localizer["Experiences"]
             }
 
-            MudForm'' {
+            MudCard'' {
+                Outlined true
+
                 adapt {
                     let! experiences = store.Experiences
                     let! getSelectedExperienceIndex, setSelectedExperienceIndex = selectedExperienceIndex.WithSetter()
@@ -39,88 +41,92 @@ let experiencePage =
                     let! getPeriod, setPeriod = period.WithSetter()
                     let! getDescription, setDescription = description.WithSetter()
 
-                    MudList'' {
-                        type' Experience
-                        SelectedValue'(getSelectedExperience, setSelectedExperience)
+                    MudCardContent'' {
 
-                        SelectedValueChanged(fun item ->
-                            match item with
-                            | Some exp ->
-                                let indexOption = experiences |> List.tryFindIndex (fun x -> x = exp)
+                        MudList'' {
+                            type' Experience
+                            SelectedValue'(getSelectedExperience, setSelectedExperience)
+                            class' "list"
 
-                                match indexOption with
-                                | Some index ->
-                                    setSelectedExperienceIndex index
-                                    setSelectedExperience item
-                                    setExperience exp
-                                    setCompany exp.Company
-                                    setWebsite exp.Website.AbsoluteUri
-                                    setPosition exp.Position
-                                    setLocation exp.Location
-                                    setPeriod exp.Period
-                                    setDescription exp.Description
-                                | None -> ()
-                            | None -> ())
+                            SelectedValueChanged(fun item ->
+                                match item with
+                                | Some exp ->
+                                    let indexOption = experiences |> List.tryFindIndex (fun x -> x = exp)
 
-                        experiences
-                        |> List.map (fun x ->
-                            MudListItem'' {
-                                Value(Some x)
-                                Text $"{x.Company} ({x.Period})"
-                            })
+                                    match indexOption with
+                                    | Some index ->
+                                        setSelectedExperienceIndex index
+                                        setSelectedExperience item
+                                        setExperience exp
+                                        setCompany exp.Company
+                                        setWebsite exp.Website.AbsoluteUri
+                                        setPosition exp.Position
+                                        setLocation exp.Location
+                                        setPeriod exp.Period
+                                        setDescription exp.Description
+                                    | None -> ()
+                                | None -> ())
+
+                            experiences
+                            |> List.map (fun x ->
+                                MudListItem'' {
+                                    class' "list-item"
+                                    Value(Some x)
+                                    title' $"{x.Company} ({x.Period})"
+                                    Text $"{x.Company} ({x.Period})"
+                                })
+
+                        }
+
+                        MudTextField''<string> {
+                            label' (string (localizer["Company"]))
+                            Variant Variant.Text
+                            Value'(getCompany, setCompany)
+                        }
+
+                        MudTextField''<string> {
+                            label' (string (localizer["Website"]))
+                            Variant Variant.Text
+                            Value'(getWebsite, setWebsite)
+
+                            Validation(
+                                Func<string, string>(fun v ->
+                                    if String.IsNullOrEmpty v || isValidUrl v then
+                                        null
+                                    else
+                                        string (localizer["InvalidUrlMessage"]))
+                            )
+                        }
+
+                        MudTextField''<string> {
+                            label' (string (localizer["Position"]))
+                            Variant Variant.Text
+                            Value'(getPosition, setPosition)
+                        }
+
+                        MudTextField''<string> {
+                            label' (string (localizer["Location"]))
+                            Variant Variant.Text
+                            Value'(getLocation, setLocation)
+                        }
+
+                        MudTextField''<string> {
+                            label' (string (localizer["Period"]))
+                            Variant Variant.Text
+                            Value'(getPeriod, setPeriod)
+                        }
+
+                        MudInputLabel'' {
+                            style' "margin-top: 16px;"
+                            localizer["Description"]
+                        }
+
+                        MudHtmlEditor.create (getDescription, setDescription, string (localizer["HtmlPlaceholder"]))
 
                     }
 
-                    MudTextField''<string> {
-                        label' (string (localizer["Company"]))
-                        Variant Variant.Text
-                        Value'(getCompany, setCompany)
-                    }
-
-                    MudTextField''<string> {
-                        label' (string (localizer["Website"]))
-                        Variant Variant.Text
-                        Value'(getWebsite, setWebsite)
-
-                        Validation(
-                            Func<string, string>(fun v ->
-                                if String.IsNullOrEmpty v || isValidUrl v then
-                                    null
-                                else
-                                    string (localizer["InvalidUrlMessage"]))
-                        )
-                    }
-
-                    MudTextField''<string> {
-                        label' (string (localizer["Position"]))
-                        Variant Variant.Text
-                        Value'(getPosition, setPosition)
-                    }
-
-                    MudTextField''<string> {
-                        label' (string (localizer["Location"]))
-                        Variant Variant.Text
-                        Value'(getLocation, setLocation)
-                    }
-
-                    MudTextField''<string> {
-                        label' (string (localizer["Period"]))
-                        Variant Variant.Text
-                        Value'(getPeriod, setPeriod)
-                    }
-
-                    MudInputLabel'' {
-                        style' "margin-top: 16px;"
-                        localizer["Description"]
-                    }
-
-                    MudHtmlEditor.create (getDescription, setDescription, string (localizer["HtmlPlaceholder"]))
-
-                    MudDivider'' { style' "margin: 5px 0px 5px 0px;" }
-
-                    MudStack'' {
-                        Row true
-                        Justify Justify.FlexEnd
+                    MudCardActions'' {
+                        class' "card-actions"
 
                         MudButton'' {
                             Variant Variant.Filled

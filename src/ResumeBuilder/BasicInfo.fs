@@ -44,7 +44,9 @@ let basicInfoPage =
                     localizer["BasicInfo"]
                 }
 
-                MudForm'' {
+                MudCard'' {
+                    Outlined true
+
                     adapt {
                         let! userName = store.Name.WithSetter()
                         let! headline = store.Headline.WithSetter()
@@ -53,94 +55,114 @@ let basicInfoPage =
                         let! phone = store.Phone.WithSetter()
                         let! picture = store.Picture
 
-                        MudImage'' {
-                            Height 140
-                            Width 140
-                            Elevation 25
-                            class' "rounded-lg profile-img"
-                            alt (string (localizer["ProfilePicture"]))
-                            src picture
-                        }
+                        MudCardContent'' {
 
-                        MudButton'' {
-                            Variant Variant.Filled
-                            Color Color.Default
-                            Size Size.Small
-                            class' "select-picture"
+                            MudCard'' {
+                                Outlined true
+                                style' "width: fit-content; margin-bottom: 16px;"
 
-                            OnClick(fun _ ->
-                                task {
-                                    let jpgFilter = struct ("JPG files", [| "*.jpg" |])
-                                    let jpegFilter = struct ("JPEG files", [| "*.jpeg" |])
-                                    let pngFilter = struct ("PNG files", [| "*.png" |])
-                                    let gifFilter = struct ("GIF files", [| "*.gif" |])
-                                    let bmpFilter = struct ("BMP files", [| "*.bmp" |])
+                                MudCardContent'' {
+                                    MudImage'' {
+                                        Height 140
+                                        Width 140
+                                        Elevation 25
+                                        class' "rounded-lg profile-img"
+                                        alt (string (localizer["ProfilePicture"]))
+                                        src picture
+                                    }
 
-                                    let! file =
-                                        openDialogService.OpenFileAsync(
-                                            title = string (localizer["SelectImgFile"]),
-                                            multiSelect = false,
-                                            filters = [| jpgFilter; jpegFilter; pngFilter; gifFilter; bmpFilter |]
-                                        )
-                                        |> Async.AwaitTask
+                                }
 
-                                    if file.Any() then
-                                        let pictureSource = file.First() |> getPictureSource
-                                        store.Picture.Publish pictureSource
-                                })
+                                MudCardActions'' {
+                                    style' "border-top: 1px solid var(--mud-palette-divider);"
 
-                            localizer["SelectPicture"]
-                        }
+                                    MudButton'' {
+                                        Variant Variant.Filled
+                                        Color Color.Default
+                                        Size Size.Small
+                                        style' "width: 100%;"
 
-                        MudTextField'' {
-                            label' (string (localizer["Name"]))
-                            Variant Variant.Text
-                            Value' userName
-                            Immediate true
-                        }
+                                        OnClick(fun _ ->
+                                            task {
+                                                let jpgFilter = struct ("JPG files", [| "*.jpg" |])
+                                                let jpegFilter = struct ("JPEG files", [| "*.jpeg" |])
+                                                let pngFilter = struct ("PNG files", [| "*.png" |])
+                                                let gifFilter = struct ("GIF files", [| "*.gif" |])
+                                                let bmpFilter = struct ("BMP files", [| "*.bmp" |])
 
-                        MudTextField'' {
-                            label' (string (localizer["Headline"]))
-                            Variant Variant.Text
-                            Value' headline
-                            Immediate true
-                        }
+                                                let! file =
+                                                    openDialogService.OpenFileAsync(
+                                                        title = string (localizer["SelectImgFile"]),
+                                                        multiSelect = false,
+                                                        filters =
+                                                            [| jpgFilter
+                                                               jpegFilter
+                                                               pngFilter
+                                                               gifFilter
+                                                               bmpFilter |]
+                                                    )
+                                                    |> Async.AwaitTask
 
-                        MudTextField'' {
-                            label' (string (localizer["Location"]))
-                            Variant Variant.Text
-                            Value' location
-                            Immediate true
-                        }
+                                                if file.Any() then
+                                                    let pictureSource = file.First() |> getPictureSource
+                                                    store.Picture.Publish pictureSource
+                                            })
 
-                        MudTextField'' {
-                            label' (string (localizer["Email"]))
-                            Variant Variant.Text
-                            Value' email
-                            Immediate true
+                                        localizer["SelectPicture"]
+                                    }
+                                }
+                            }
 
-                            Validation(
-                                Func<string, string>(fun v ->
-                                    if String.IsNullOrEmpty v || emailRegex.IsMatch v then
-                                        null
-                                    else
-                                        string (localizer["InvalidEmailMessage"]))
-                            )
-                        }
+                            MudTextField'' {
+                                label' (string (localizer["Name"]))
+                                Variant Variant.Text
+                                Value' userName
+                                Immediate true
+                            }
 
-                        MudTextField'' {
-                            label' (string (localizer["Phone"]))
-                            Variant Variant.Text
-                            Value' phone
-                            Immediate true
+                            MudTextField'' {
+                                label' (string (localizer["Headline"]))
+                                Variant Variant.Text
+                                Value' headline
+                                Immediate true
+                            }
 
-                            Validation(
-                                Func<string, string>(fun v ->
-                                    if String.IsNullOrEmpty v || phoneRegex.IsMatch v then
-                                        null
-                                    else
-                                        string (localizer["InvalidPhoneMessage"]))
-                            )
+                            MudTextField'' {
+                                label' (string (localizer["Location"]))
+                                Variant Variant.Text
+                                Value' location
+                                Immediate true
+                            }
+
+                            MudTextField'' {
+                                label' (string (localizer["Email"]))
+                                Variant Variant.Text
+                                Value' email
+                                Immediate true
+
+                                Validation(
+                                    Func<string, string>(fun v ->
+                                        if String.IsNullOrEmpty v || emailRegex.IsMatch v then
+                                            null
+                                        else
+                                            string (localizer["InvalidEmailMessage"]))
+                                )
+                            }
+
+                            MudTextField'' {
+                                label' (string (localizer["Phone"]))
+                                Variant Variant.Text
+                                Value' phone
+                                Immediate true
+
+                                Validation(
+                                    Func<string, string>(fun v ->
+                                        if String.IsNullOrEmpty v || phoneRegex.IsMatch v then
+                                            null
+                                        else
+                                            string (localizer["InvalidPhoneMessage"]))
+                                )
+                            }
                         }
                     }
                 }

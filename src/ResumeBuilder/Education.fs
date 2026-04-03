@@ -26,7 +26,9 @@ let educationPage =
                 localizer["Educations"]
             }
 
-            MudForm'' {
+            MudCard'' {
+                Outlined true
+
                 adapt {
                     let! educations = store.Educations
                     let! getSelectedEducationIndex, setSelectedEducationIndex = selectedEducationIndex.WithSetter()
@@ -40,100 +42,104 @@ let educationPage =
                     let! getLocation, setLocation = location.WithSetter()
                     let! getWebsite, setWebsite = website.WithSetter()
 
-                    MudList'' {
-                        type' Education
-                        SelectedValue'(getSelectedEducation, setSelectedEducation)
+                    MudCardContent'' {
 
-                        SelectedValueChanged(fun item ->
-                            match item with
-                            | Some edu ->
-                                let indexOption = educations |> List.tryFindIndex (fun x -> x = edu)
+                        MudList'' {
+                            type' Education
+                            SelectedValue'(getSelectedEducation, setSelectedEducation)
+                            class' "list"
 
-                                match indexOption with
-                                | Some index ->
-                                    setSelectedEducationIndex index
-                                    setSelectedEducation item
-                                    setEducation edu
-                                    setSchool edu.School
-                                    setDegree edu.Degree
-                                    setArea edu.Area
-                                    setGrade edu.Grade
-                                    setPeriod edu.Period
-                                    setLocation edu.Location
-                                    setWebsite edu.Website.AbsoluteUri
-                                | None -> ()
-                            | None -> ())
+                            SelectedValueChanged(fun item ->
+                                match item with
+                                | Some edu ->
+                                    let indexOption = educations |> List.tryFindIndex (fun x -> x = edu)
 
-                        educations
-                        |> List.map (fun x ->
-                            MudListItem'' {
-                                Value(Some x)
-                                Text $"{x.School} ({x.Period})"
-                            })
+                                    match indexOption with
+                                    | Some index ->
+                                        setSelectedEducationIndex index
+                                        setSelectedEducation item
+                                        setEducation edu
+                                        setSchool edu.School
+                                        setDegree edu.Degree
+                                        setArea edu.Area
+                                        setGrade edu.Grade
+                                        setPeriod edu.Period
+                                        setLocation edu.Location
+                                        setWebsite edu.Website.AbsoluteUri
+                                    | None -> ()
+                                | None -> ())
+
+                            educations
+                            |> List.map (fun x ->
+                                MudListItem'' {
+                                    class' "list-item"
+                                    Value(Some x)
+                                    title' $"{x.School} ({x.Period})"
+                                    Text $"{x.School} ({x.Period})"
+                                })
+                        }
+
+                        MudTextField''<string> {
+                            label' (string (localizer["School"]))
+                            Variant Variant.Text
+                            Value'(getSchool, setSchool)
+                            Immediate true
+                        }
+
+                        MudTextField''<string> {
+                            label' (string (localizer["Degree"]))
+                            Variant Variant.Text
+                            Value'(getDegree, setDegree)
+                            Immediate true
+                        }
+
+                        MudTextField''<string> {
+                            label' (string (localizer["Area"]))
+                            Variant Variant.Text
+                            Value'(getArea, setArea)
+                            Immediate true
+                        }
+
+                        MudTextField''<string> {
+                            label' (string (localizer["Grade"]))
+                            Variant Variant.Text
+                            Value'(getGrade, setGrade)
+                            Immediate true
+                        }
+
+                        MudTextField''<string> {
+                            label' (string (localizer["Location"]))
+                            Variant Variant.Text
+                            Value'(getLocation, setLocation)
+                            Immediate true
+                        }
+
+                        MudTextField''<string> {
+                            label' (string (localizer["Period"]))
+                            Variant Variant.Text
+                            Value'(getPeriod, setPeriod)
+                            Immediate true
+                        }
+
+                        MudTextField''<string> {
+                            label' (string (localizer["Website"]))
+                            Variant Variant.Text
+                            Value'(getWebsite, setWebsite)
+                            Immediate true
+
+                            Validation(
+                                Func<string, string>(fun v ->
+                                    if String.IsNullOrEmpty v || isValidUrl v then
+                                        null
+                                    else
+                                        string (localizer["InvalidUrlMessage"]))
+                            )
+                        }
+
                     }
 
-                    MudTextField''<string> {
-                        label' (string (localizer["School"]))
-                        Variant Variant.Text
-                        Value'(getSchool, setSchool)
-                        Immediate true
-                    }
-
-                    MudTextField''<string> {
-                        label' (string (localizer["Degree"]))
-                        Variant Variant.Text
-                        Value'(getDegree, setDegree)
-                        Immediate true
-                    }
-
-                    MudTextField''<string> {
-                        label' (string (localizer["Area"]))
-                        Variant Variant.Text
-                        Value'(getArea, setArea)
-                        Immediate true
-                    }
-
-                    MudTextField''<string> {
-                        label' (string (localizer["Grade"]))
-                        Variant Variant.Text
-                        Value'(getGrade, setGrade)
-                        Immediate true
-                    }
-
-                    MudTextField''<string> {
-                        label' (string (localizer["Location"]))
-                        Variant Variant.Text
-                        Value'(getLocation, setLocation)
-                        Immediate true
-                    }
-
-                    MudTextField''<string> {
-                        label' (string (localizer["Period"]))
-                        Variant Variant.Text
-                        Value'(getPeriod, setPeriod)
-                        Immediate true
-                    }
-
-                    MudTextField''<string> {
-                        label' (string (localizer["Website"]))
-                        Variant Variant.Text
-                        Value'(getWebsite, setWebsite)
-                        Immediate true
-
-                        Validation(
-                            Func<string, string>(fun v ->
-                                if String.IsNullOrEmpty v || isValidUrl v then
-                                    null
-                                else
-                                    string (localizer["InvalidUrlMessage"]))
-                        )
-                    }
-
-                    MudDivider'' { style' "margin: 5px 0px 5px 0px;" }
-
-                    MudStack'' {
-                        Row true
-                        Justify Justify.FlexEnd
+                    MudCardActions'' {
+                        class' "card-actions"
 
                         MudButton'' {
                             Variant Variant.Filled
