@@ -95,6 +95,13 @@ let navmenus =
                         Icon Icons.Material.Filled.School
                         localizer["Educations"]
                     }
+
+                    MudNavLink'' {
+                        Href "/certification"
+                        Match NavLinkMatch.All
+                        Icon Icons.Material.Filled.CardMembership
+                        localizer["Certifications"]
+                    }
                 }
             }
 
@@ -106,6 +113,7 @@ let routes =
            routeCi "/summary" summaryPage
            routeCi "/experience" experiencePage
            routeCi "/education" educationPage
+           routeCi "/certification" certificationPage
            routeAny basicInfoPage |]
 
 let mudTheme =

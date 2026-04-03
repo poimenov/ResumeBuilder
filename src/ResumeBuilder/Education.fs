@@ -137,7 +137,7 @@ let educationPage =
 
                         MudButton'' {
                             Variant Variant.Filled
-                            Color Color.Primary
+                            Color Color.Default
                             Size Size.Small
 
                             Disabled(
@@ -179,7 +179,7 @@ let educationPage =
 
                         MudButton'' {
                             Variant Variant.Filled
-                            Color Color.Primary
+                            Color Color.Default
                             Size Size.Small
                             Disabled(getSelectedEducationIndex < 0)
 
@@ -203,7 +203,7 @@ let educationPage =
 
                         MudButton'' {
                             Variant Variant.Filled
-                            Color Color.Primary
+                            Color Color.Default
                             Size Size.Small
                             Disabled(getSelectedEducationIndex < 0)
 

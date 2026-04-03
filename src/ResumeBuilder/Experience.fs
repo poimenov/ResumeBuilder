@@ -124,7 +124,7 @@ let experiencePage =
 
                         MudButton'' {
                             Variant Variant.Filled
-                            Color Color.Primary
+                            Color Color.Default
                             Size Size.Small
 
                             Disabled(
@@ -167,7 +167,7 @@ let experiencePage =
 
                         MudButton'' {
                             Variant Variant.Filled
-                            Color Color.Primary
+                            Color Color.Default
                             Size Size.Small
                             Disabled(getSelectedExperienceIndex < 0)
 
@@ -190,7 +190,7 @@ let experiencePage =
 
                         MudButton'' {
                             Variant Variant.Filled
-                            Color Color.Primary
+                            Color Color.Default
                             Size Size.Small
                             Disabled(getSelectedExperienceIndex < 0)
 

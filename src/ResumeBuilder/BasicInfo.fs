@@ -64,7 +64,7 @@ let basicInfoPage =
 
                         MudButton'' {
                             Variant Variant.Filled
-                            Color Color.Primary
+                            Color Color.Default
                             Size Size.Small
                             class' "select-picture"
 

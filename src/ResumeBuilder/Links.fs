@@ -75,7 +75,7 @@ let linksPage =
 
                         MudButton'' {
                             Variant Variant.Filled
-                            Color Color.Primary
+                            Color Color.Default
                             Size Size.Small
                             Disabled(String.IsNullOrWhiteSpace getLink)
 
@@ -96,7 +96,7 @@ let linksPage =
 
                         MudButton'' {
                             Variant Variant.Filled
-                            Color Color.Primary
+                            Color Color.Default
                             Size Size.Small
                             Disabled(getSelectedLinkIndex < 0)
 
@@ -114,7 +114,7 @@ let linksPage =
 
                         MudButton'' {
                             Variant Variant.Filled
-                            Color Color.Primary
+                            Color Color.Default
                             Size Size.Small
                             Disabled(getSelectedLinkIndex < 0)
 
