@@ -155,5 +155,14 @@
     </data>
     <data name="Label" xml:space="preserve">
         <value>Метка</value>
-    </data>                                                                     
+    </data>   
+    <data name="LanguageName" xml:space="preserve">
+        <value>Название языка</value>
+    </data>
+    <data name="Fluency" xml:space="preserve">
+        <value>Степень владения</value>
+    </data>
+    <data name="Level" xml:space="preserve">
+        <value>Уровень</value>
+    </data>                                                                      
 </root>

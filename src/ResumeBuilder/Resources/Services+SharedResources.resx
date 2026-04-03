@@ -156,4 +156,13 @@
     <data name="Label" xml:space="preserve">
         <value>Label</value>
     </data> 
+    <data name="LanguageName" xml:space="preserve">
+        <value>Language Name</value>
+    </data>
+    <data name="Fluency" xml:space="preserve">
+        <value>Fluency</value>
+    </data>
+    <data name="Level" xml:space="preserve">
+        <value>Level</value>
+    </data>
 </root>

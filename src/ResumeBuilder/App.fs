@@ -108,6 +108,13 @@ let navmenus =
                         Icon Icons.Material.Filled.CardMembership
                         localizer["Certifications"]
                     }
+
+                    MudNavLink'' {
+                        Href "/language"
+                        Match NavLinkMatch.All
+                        Icon Icons.Material.Filled.Language
+                        localizer["Languages"]
+                    }
                 }
             }
 
@@ -120,6 +127,7 @@ let routes =
            routeCi "/experience" experiencePage
            routeCi "/education" educationPage
            routeCi "/certification" certificationPage
+           routeCi "/language" languagePage
            routeAny basicInfoPage |]
 
 let mudTheme =
