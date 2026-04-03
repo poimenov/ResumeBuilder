@@ -17,6 +17,7 @@
     <Compile Include="Experience.fs" />
     <Compile Include="Education.fs" />
     <Compile Include="Certification.fs" />
+    <Compile Include="Skills.fs" />
     <Compile Include="Language.fs" />
     <Compile Include="App.fs" />
     <Compile Include="Program.fs" />

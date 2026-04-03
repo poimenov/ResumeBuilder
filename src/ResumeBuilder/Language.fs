@@ -110,6 +110,8 @@ let languagePage =
 
                                 if not exists then
                                     store.Languages.Publish(languages @ [ newLanguage ])
+                                    setSelectedLanguage None
+                                    setSelectedLanguageIndex -1
                                     setLangName ""
                                     setFluency ""
                                     setLevel 1)
@@ -128,6 +130,8 @@ let languagePage =
                                 | None -> ()
                                 | Some lang ->
                                     store.Languages.Publish(languages |> List.filter (fun x -> x <> lang))
+                                    setSelectedLanguage None
+                                    setSelectedLanguageIndex -1
                                     setLangName ""
                                     setFluency ""
                                     setLevel 1)
@@ -151,6 +155,8 @@ let languagePage =
                                             if i = getSelectedLanguageIndex then updatedLanguage else x)
                                     )
 
+                                    setSelectedLanguage None
+                                    setSelectedLanguageIndex -1
                                     setLangName ""
                                     setFluency ""
                                     setLevel 1)

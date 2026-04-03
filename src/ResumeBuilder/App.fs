@@ -110,6 +110,13 @@ let navmenus =
                     }
 
                     MudNavLink'' {
+                        Href "/skills"
+                        Match NavLinkMatch.All
+                        Icon Icons.Material.Filled.AutoAwesome
+                        localizer["Skills"]
+                    }
+
+                    MudNavLink'' {
                         Href "/language"
                         Match NavLinkMatch.All
                         Icon Icons.Material.Filled.Language
@@ -128,6 +135,7 @@ let routes =
            routeCi "/education" educationPage
            routeCi "/certification" certificationPage
            routeCi "/language" languagePage
+           routeCi "/skills" skillsPage
            routeAny basicInfoPage |]
 
 let mudTheme =

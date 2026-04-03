@@ -154,6 +154,8 @@ let certificationPage =
 
                                 if not exists then
                                     store.Certifications.Publish(certifications @ [ newCertification ])
+                                    setSelectedCertification None
+                                    setSelectedCertificationIndex -1
                                     setTitle ""
                                     setIssuer ""
                                     setDate ""

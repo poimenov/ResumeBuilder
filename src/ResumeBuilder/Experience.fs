@@ -161,6 +161,8 @@ let experiencePage =
 
                                 if not exists then
                                     store.Experiences.Publish(experiences @ [ newExperience ])
+                                    setSelectedExperience None
+                                    setSelectedExperienceIndex -1
                                     setCompany ""
                                     setWebsite ""
                                     setPosition ""

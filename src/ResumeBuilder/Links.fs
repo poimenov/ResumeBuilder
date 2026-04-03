@@ -93,6 +93,8 @@ let linksPage =
 
                                 if not exists && isValidUrl getLink then
                                     store.Links.Publish(links @ [ getLink ])
+                                    setSelectedLink None
+                                    setSelectedLinkIndex -1
                                     setLink ""
 
                             )

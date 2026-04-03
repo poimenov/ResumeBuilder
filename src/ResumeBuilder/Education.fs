@@ -172,6 +172,8 @@ let educationPage =
 
                                 if not exists then
                                     store.Educations.Publish(educations @ [ newEducation ])
+                                    setSelectedEducation None
+                                    setSelectedEducationIndex -1
                                     setSchool ""
                                     setDegree ""
                                     setArea ""
