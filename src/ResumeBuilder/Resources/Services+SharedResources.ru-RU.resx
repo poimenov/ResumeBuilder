@@ -133,7 +133,7 @@
         <value>Квалификация</value>
     </data>
     <data name="School" xml:space="preserve">
-        <value>Школа</value>
+        <value>Учебное заведение</value>
     </data>
     <data name="Settings" xml:space="preserve">
         <value>Настройки</value>
@@ -164,5 +164,14 @@
     </data>
     <data name="Level" xml:space="preserve">
         <value>Уровень</value>
-    </data>                                                                      
+    </data> 
+    <data name="SkillGroupName" xml:space="preserve">
+        <value>Группа навыков</value>
+    </data>
+    <data name="Keywords" xml:space="preserve">
+        <value>Ключевые слова</value>
+    </data>    
+    <data name="Keyword" xml:space="preserve">
+        <value>Ключевое слово</value>
+    </data>                                                                           
 </root>

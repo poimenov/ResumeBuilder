@@ -165,4 +165,13 @@
     <data name="Level" xml:space="preserve">
         <value>Level</value>
     </data>
+    <data name="SkillGroupName" xml:space="preserve">
+        <value>Skills group</value>
+    </data>
+    <data name="Keywords" xml:space="preserve">
+        <value>Keywords</value>
+    </data>    
+    <data name="Keyword" xml:space="preserve">
+        <value>Keyword</value>
+    </data>     
 </root>
