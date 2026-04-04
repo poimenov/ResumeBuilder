@@ -44,7 +44,7 @@ let appMenu (services: IServices) =
     MudMenu'' {
         label' (string (services.Localizer["Settings"]))
         StartIcon Icons.Material.Filled.Settings
-        style' "width: 145px"
+        style' "width: 180px"
         RelativeWidth DropdownWidth.Relative
         AnchorOrigin Origin.BottomLeft
         TransformOrigin Origin.BottomLeft
@@ -52,6 +52,7 @@ let appMenu (services: IServices) =
 
         MudMenuItem'' {
             label' (string (services.Localizer["LoadXML"]))
+            Icon Icons.Material.Filled.FileOpen
 
             OnClick(fun _ ->
                 task {
@@ -87,6 +88,7 @@ let appMenu (services: IServices) =
 
         MudMenu'' {
             label' (string (services.Localizer["SaveAs"]))
+            StartIcon Icons.Material.Filled.SaveAs
             AnchorOrigin Origin.BottomLeft
             TransformOrigin Origin.BottomRight
 
@@ -159,44 +161,67 @@ let appMenu (services: IServices) =
             }
         }
 
-        MudMenu'' {
-            label' (string (services.Localizer["Template"]))
-            AnchorOrigin Origin.BottomLeft
-            TransformOrigin Origin.BottomRight
+        adapt {
+            let! isDarkMode = services.Store.IsDarkMode
 
-            templates
-            |> Array.map (fun template ->
+            let darkLightModeButtonIcon, label =
+                if isDarkMode then
+                    Icons.Material.Rounded.LightMode, string (services.Localizer["LightMode"])
+                else
+                    Icons.Material.Outlined.DarkMode, string (services.Localizer["DarkMode"])
+
+            MudMenu'' {
+                label' (string (services.Localizer["Template"]))
+                StartIcon Icons.Material.Filled.FileCopy
+                AnchorOrigin Origin.BottomLeft
+                TransformOrigin Origin.BottomRight
+
+                templates
+                |> Array.map (fun template ->
+                    MudMenuItem'' {
+                        label' template
+
+                        Icon(
+                            if services.Store.Template.Value = template then
+                                Icons.Material.Filled.Check
+                            else
+                                null
+                        )
+
+                        OnClick(fun _ -> services.Store.Template.Publish template)
+                    })
+            }
+
+            MudMenu'' {
+                label' (string (services.Localizer["Language"]))
+                StartIcon Icons.Material.Filled.Language
+                title' (string (services.Localizer["NeedsAppRestart"]))
+                AnchorOrigin Origin.BottomLeft
+                TransformOrigin Origin.BottomRight
+
                 MudMenuItem'' {
-                    label' template
+                    label' (string (services.Localizer["English"]))
+                    Icon(isCurrentCulture "en-US")
+                    OnClick(fun _ -> setCurrentCulture "en-US")
+                }
 
-                    Icon(
-                        if services.Store.Template.Value = template then
-                            Icons.Material.Filled.Check
-                        else
-                            null
-                    )
-
-                    OnClick(fun _ -> services.Store.Template.Publish template)
-                })
-        }
-
-        MudMenu'' {
-            label' (string (services.Localizer["Language"]))
-            title' (string (services.Localizer["NeedsAppRestart"]))
-            AnchorOrigin Origin.BottomLeft
-            TransformOrigin Origin.BottomRight
-
-            MudMenuItem'' {
-                label' (string (services.Localizer["English"]))
-                Icon(isCurrentCulture "en-US")
-                OnClick(fun _ -> setCurrentCulture "en-US")
+                MudMenuItem'' {
+                    label' (string (services.Localizer["Russian"]))
+                    Icon(isCurrentCulture "ru-RU")
+                    OnClick(fun _ -> setCurrentCulture "ru-RU")
+                }
             }
 
             MudMenuItem'' {
-                label' (string (services.Localizer["Russian"]))
-                Icon(isCurrentCulture "ru-RU")
-                OnClick(fun _ -> setCurrentCulture "ru-RU")
+                label' label
+                Icon darkLightModeButtonIcon
+
+                OnClick(fun _ ->
+                    let newMode = not isDarkMode
+                    services.Store.IsDarkMode.Publish newMode
+                    services.Options.Value.IsDarkMode <- newMode
+                    lock services.Options.Value (fun () -> services.Options.Value.Save()))
+
             }
         }
-
     }

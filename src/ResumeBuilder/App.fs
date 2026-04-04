@@ -25,33 +25,12 @@ let appHeader =
             MudText'' {
                 Typo Typo.h5
                 class' "ml-3"
-                AppSettings.ApplicationName
+                services.Localizer["AppTitle"]
             }
 
             MudSpacer''
 
-            adapt {
-                let! isDarkMode = services.Store.IsDarkMode
-
-                let darkLightModeButtonIcon =
-                    if isDarkMode then
-                        Icons.Material.Rounded.LightMode
-                    else
-                        Icons.Material.Outlined.DarkMode
-
-                MudIconButton'' {
-                    Icon darkLightModeButtonIcon
-                    Color Color.Inherit
-
-                    onclick (fun _ ->
-                        let newMode = not isDarkMode
-                        services.Store.IsDarkMode.Publish newMode
-                        services.Options.Value.IsDarkMode <- newMode
-                        lock services.Options.Value (fun () -> services.Options.Value.Save()))
-                }
-
-                appMenu services
-            }
+            appMenu services
         })
 
 let navmenus =
