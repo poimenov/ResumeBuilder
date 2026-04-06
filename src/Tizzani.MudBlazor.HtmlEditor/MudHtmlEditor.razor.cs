@@ -42,18 +42,6 @@ public sealed partial class MudHtmlEditor : IAsyncDisposable
     public EventCallback<string> HtmlChanged { get; set; }
 
     /// <summary>
-    /// The plain-text content from the editor.
-    /// </summary>
-    [Parameter]
-    public string Text { get; set; } = "";
-
-    /// <summary>
-    /// Raised when the <see cref="Text"/> property changes.
-    /// </summary>
-    [Parameter]
-    public EventCallback<string> TextChanged { get; set; }
-
-    /// <summary>
     /// Whether or not the user can resize the editor. Default value is <see langword="true" />.
     /// </summary>
     [Parameter]
@@ -83,7 +71,6 @@ public sealed partial class MudHtmlEditor : IAsyncDisposable
             await _quill.InvokeVoidAsync("setHtml", html);
 
         HandleHtmlContentChanged(html);
-        HandleTextContentChanged(await GetText());
     }
 
     /// <summary>
@@ -93,17 +80,6 @@ public sealed partial class MudHtmlEditor : IAsyncDisposable
     {
         if (_quill is not null)
             return await _quill.InvokeAsync<string>("getHtml");
-
-        return "";
-    }
-
-    /// <summary>
-    /// Gets the current plain-text content of the editor.
-    /// </summary>
-    public async Task<string> GetText()
-    {
-        if (_quill is not null)
-            return await _quill.InvokeAsync<string>("getText");
 
         return "";
     }
@@ -140,7 +116,6 @@ public sealed partial class MudHtmlEditor : IAsyncDisposable
             if (Html != await GetHtml())
             {
                 await _quill.InvokeVoidAsync("setHtml", Html);
-                HandleTextContentChanged(await GetText());
             }
         }
 
@@ -154,15 +129,6 @@ public sealed partial class MudHtmlEditor : IAsyncDisposable
 
         Html = html;
         await HtmlChanged.InvokeAsync(html);
-    }
-
-    [JSInvokable]
-    public async void HandleTextContentChanged(string text)
-    {
-        if (Text == text) return; // nothing changed
-
-        Text = text;
-        await TextChanged.InvokeAsync(text);
     }
 
     async ValueTask IAsyncDisposable.DisposeAsync()

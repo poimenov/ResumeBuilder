@@ -138,8 +138,8 @@
     <data name="School" xml:space="preserve">
         <value>Учебное заведение</value>
     </data>
-    <data name="Settings" xml:space="preserve">
-        <value>Настройки</value>
+    <data name="MainMenu" xml:space="preserve">
+        <value>Главное меню</value>
     </data> 
     <data name="Description" xml:space="preserve">
         <value>Описание</value>
@@ -182,5 +182,11 @@
     </data>   
     <data name="LightMode" xml:space="preserve">
         <value>Светлый режим</value>
-    </data>                                                                         
+    </data> 
+    <data name="SourceCode" xml:space="preserve">
+        <value>Исходный код</value>
+    </data>   
+    <data name="ClearAll" xml:space="preserve">
+        <value>Очистить всё</value>
+    </data>                                                                                         
 </root>

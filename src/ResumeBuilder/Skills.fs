@@ -109,6 +109,7 @@ let skillsPage =
                                 Size Size.Small
                                 StartIcon Icons.Material.Filled.Add
                                 Disabled(String.IsNullOrWhiteSpace getKeyword)
+                                title' (string (localizer["Add"]))
 
                                 OnClick(fun _ ->
                                     let exists =

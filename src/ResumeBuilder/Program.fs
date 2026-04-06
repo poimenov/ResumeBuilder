@@ -12,6 +12,7 @@ open MudBlazor.Translations
 open log4net.Config
 open Photino.Blazor
 open ResumeBuilder
+open Microsoft.Extensions.Localization
 
 
 [<STAThread>]
@@ -73,6 +74,9 @@ let main args =
     CultureInfo.DefaultThreadCurrentCulture <- CultureInfo.GetCultureInfo settings.Value.CultureName
     CultureInfo.DefaultThreadCurrentUICulture <- CultureInfo.GetCultureInfo settings.Value.CultureName
 
+    let localizer =
+        application.Services.GetRequiredService<IStringLocalizer<SharedResources>>()
+
     // customize window
     application.MainWindow
         .RegisterSizeChangedHandler(
@@ -83,8 +87,7 @@ let main args =
         )
         .SetSize(settings.Value.WindowWidth, settings.Value.WindowHeight)
         .SetIconFile(Path.Combine(AppSettings.WwwRootFolderName, "images", AppSettings.FavIconFileName))
-        .SetTitle
-        AppSettings.ApplicationName
+        .SetTitle(string (localizer["AppTitle"]))
     |> ignore
 
     AppDomain.CurrentDomain.UnhandledException.Add(fun e ->

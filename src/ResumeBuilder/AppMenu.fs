@@ -6,6 +6,7 @@ open System.IO
 open System.Linq
 open MudBlazor
 open Fun.Blazor
+open FSharp.Data.Adaptive
 
 let appMenu (services: IServices) =
     let templates =
@@ -41,8 +42,40 @@ let appMenu (services: IServices) =
           Experiences = store.Experiences.Value
           Languages = store.Languages.Value }
 
+    let publish (store: IShareStore, resume: Resume) =
+        transact (fun () ->
+            store.Name.Value <- resume.Name
+            store.Headline.Value <- resume.Headline
+            store.Picture.Value <- resume.Picture
+            store.Email.Value <- resume.Email
+            store.Phone.Value <- resume.Phone
+            store.Location.Value <- resume.Location
+            store.Summary.Value <- resume.Summary
+            store.Links.Value <- resume.Links
+            store.Educations.Value <- resume.Educations
+            store.Certifications.Value <- resume.Certifications
+            store.Skills.Value <- resume.Skills
+            store.Experiences.Value <- resume.Experiences
+            store.Languages.Value <- resume.Languages)
+
+    let clear (store: IShareStore) =
+        transact (fun () ->
+            store.Name.Value <- ""
+            store.Headline.Value <- ""
+            store.Picture.Value <- defaultPicture
+            store.Email.Value <- ""
+            store.Phone.Value <- ""
+            store.Location.Value <- ""
+            store.Summary.Value <- ""
+            store.Links.Value <- []
+            store.Educations.Value <- []
+            store.Certifications.Value <- []
+            store.Skills.Value <- []
+            store.Experiences.Value <- []
+            store.Languages.Value <- [])
+
     MudMenu'' {
-        label' (string (services.Localizer["Settings"]))
+        label' (string (services.Localizer["MainMenu"]))
         StartIcon Icons.Material.Filled.Settings
         style' "width: 180px"
         RelativeWidth DropdownWidth.Relative
@@ -67,22 +100,17 @@ let appMenu (services: IServices) =
                     if file.Any() then
                         let! xmlContent = File.ReadAllTextAsync(file.First()) |> Async.AwaitTask
                         let resume = ResumeSerializer.FromXml xmlContent
+                        publish (services.Store, resume)
 
-                        services.Store.Name.Publish resume.Name
-                        services.Store.Headline.Publish resume.Headline
-                        services.Store.Picture.Publish resume.Picture
-                        services.Store.Email.Publish resume.Email
-                        services.Store.Phone.Publish resume.Phone
-                        services.Store.Location.Publish resume.Location
-                        services.Store.Summary.Publish resume.Summary
-                        services.Store.Links.Publish resume.Links
-                        services.Store.Educations.Publish resume.Educations
-                        services.Store.Certifications.Publish resume.Certifications
-                        services.Store.Skills.Publish resume.Skills
-                        services.Store.Experiences.Publish resume.Experiences
-                        services.Store.Languages.Publish resume.Languages
                 }
                 |> ignore)
+        }
+
+        MudMenuItem'' {
+            label' (string (services.Localizer["ClearAll"]))
+            Icon Icons.Material.Filled.ClearAll
+
+            OnClick(fun _ -> task { clear services.Store } |> ignore)
         }
 
 
@@ -119,6 +147,7 @@ let appMenu (services: IServices) =
                         let! file =
                             services.OpenDialogService.SaveFileAsync(
                                 title = string (services.Localizer["SelectHtmlFile"]),
+                                defaultName = "resume.html",
                                 filters = [| struct ("HTML files", [| "*.html" |]) |]
                             )
                             |> Async.AwaitTask
@@ -144,6 +173,7 @@ let appMenu (services: IServices) =
                         let! file =
                             services.OpenDialogService.SaveFileAsync(
                                 title = string (services.Localizer["SelectPdfFile"]),
+                                defaultName = "resume.pdf",
                                 filters = [| struct ("PDF files", [| "*.pdf" |]) |]
                             )
                             |> Async.AwaitTask
@@ -222,6 +252,12 @@ let appMenu (services: IServices) =
                     services.Options.Value.IsDarkMode <- newMode
                     lock services.Options.Value (fun () -> services.Options.Value.Save()))
 
+            }
+
+            MudMenuItem'' {
+                Icon Icons.Custom.Brands.GitHub
+                label' (string (services.Localizer["SourceCode"]))
+                OnClick(fun _ -> services.LinkOpeningService.OpenUrl "https://github.com/poimenov/ResumeBuilder")
             }
         }
     }

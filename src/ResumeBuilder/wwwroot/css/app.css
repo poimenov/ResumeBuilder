@@ -104,3 +104,9 @@ iframe {
     overflow-x: hidden;
     text-overflow: ellipsis;
 }
+
+.appTitle {
+  font-weight: bolder;
+  color: transparent;
+  -webkit-text-stroke: 1px var(--mud-palette-appbar-text);    
+}

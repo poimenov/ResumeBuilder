@@ -23,8 +23,9 @@ let appHeader =
             }
 
             MudText'' {
-                Typo Typo.h5
-                class' "ml-3"
+                Typo Typo.h4
+                class' "ml-3 appTitle"
+                title' $"v{typeof<AppSettings>.Assembly.GetName().Version}"
                 services.Localizer["AppTitle"]
             }
 
