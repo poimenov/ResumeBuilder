@@ -4,7 +4,7 @@
 [![F#](https://img.shields.io/badge/F%23-10.0-lightblue.svg)](https://fsharp.org/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-**ResumeBuilder** is a modern desktiop application for creating professional resumes, written in F# using Photino.Blazor and MudBlazor. Create impressive resumes quickly and easily!
+**ResumeBuilder** is a modern desktop application for creating professional resumes, written in F# using Photino.Blazor and MudBlazor. Create impressive resumes quickly and easily!
 
 ![Screenshot of the UI](/img/screen.jpg)
 
