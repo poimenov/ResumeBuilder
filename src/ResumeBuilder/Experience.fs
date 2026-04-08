@@ -7,6 +7,7 @@ open Fun.Blazor
 open FSharp.Data.Adaptive
 open Tizzani.MudBlazor.HtmlEditor
 open MudBlazor
+open System.Collections.Generic
 
 let experiencePage =
     html.inject (fun (store: IShareStore, localizer: IStringLocalizer<SharedResources>) ->
@@ -121,7 +122,15 @@ let experiencePage =
                             localizer["Description"]
                         }
 
-                        MudHtmlEditor.create (getDescription, setDescription, string (localizer["HtmlPlaceholder"]))
+                        let attributes: IDictionary<string, obj> =
+                            dict [ ("style", "max-height: calc(100dvh - 680px);") ]
+
+                        MudHtmlEditor.create (
+                            getDescription,
+                            setDescription,
+                            string (localizer["HtmlPlaceholder"]),
+                            attributes
+                        )
 
                     }
 

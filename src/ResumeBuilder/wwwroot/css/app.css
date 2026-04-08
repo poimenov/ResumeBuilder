@@ -95,7 +95,7 @@ iframe {
     border: 1px solid var(--mud-palette-divider); 
     border-radius: 4px;
     margin-bottom: 16px;
-    max-height: 200px; 
+    max-height: 150px; 
     overflow-y: auto;
 }
 
@@ -107,6 +107,8 @@ iframe {
 
 .appTitle {
   font-weight: bolder;
-  color: transparent;
-  -webkit-text-stroke: 1px var(--mud-palette-appbar-text);    
+  color: var(--mud-palette-background);
+  font-family: Arial, Helvetica, sans-serif;
+  -webkit-text-stroke: 1px var(--mud-palette-appbar-text); 
+  text-shadow: var(--mud-palette-text-primary) 0px 0px 5px;   
 }

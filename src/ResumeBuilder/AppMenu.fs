@@ -147,7 +147,6 @@ let appMenu (services: IServices) =
                         let! file =
                             services.OpenDialogService.SaveFileAsync(
                                 title = string (services.Localizer["SelectHtmlFile"]),
-                                defaultName = "resume.html",
                                 filters = [| struct ("HTML files", [| "*.html" |]) |]
                             )
                             |> Async.AwaitTask
@@ -173,7 +172,6 @@ let appMenu (services: IServices) =
                         let! file =
                             services.OpenDialogService.SaveFileAsync(
                                 title = string (services.Localizer["SelectPdfFile"]),
-                                defaultName = "resume.pdf",
                                 filters = [| struct ("PDF files", [| "*.pdf" |]) |]
                             )
                             |> Async.AwaitTask
