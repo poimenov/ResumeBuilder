@@ -78,6 +78,7 @@ let skillsPage =
                         }
 
                         MudChipSet''<string> {
+                            style' "max-height: 120px;overflow-y: auto;"
                             AllClosable true
 
                             getKeywords

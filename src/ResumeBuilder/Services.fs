@@ -439,13 +439,67 @@ type RazorEngineService(logger: ILogger<IRazorEngineService>) =
 type IGeneratePdfService =
     abstract member CreateAsync: key: string * model: Resume * outputPath: string -> Task<unit>
 
-type GeneratePdfService(razorEngineService: IRazorEngineService, logger: ILogger<IGeneratePdfService>) =
+type GeneratePdfService
+    (
+        razorEngineService: IRazorEngineService,
+        platformService: IPlatformService,
+        settingsOptions: IOptions<AppSettings>,
+        logger: ILogger<IGeneratePdfService>
+    ) =
+
+    let findChromePath (platform: Platform) : string option =
+        let commonPaths =
+            match platform with
+            | Windows ->
+                [ @"C:\Program Files\Google\Chrome\Application\chrome.exe"
+                  @"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe"
+                  Environment.GetFolderPath Environment.SpecialFolder.LocalApplicationData
+                  + @"\Google\Chrome\Application\chrome.exe" ]
+            | MacOS ->
+                [ @"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+                  Environment.GetFolderPath Environment.SpecialFolder.UserProfile
+                  + @"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" ]
+            | Linux ->
+                [ "/usr/bin/google-chrome"
+                  "/usr/bin/chromium"
+                  "/usr/bin/chromium-browser"
+                  "/usr/bin/google-chrome-stable" ]
+            | Unknown -> []
+
+        if
+            not (String.IsNullOrWhiteSpace settingsOptions.Value.ChromeExecutablePath)
+            && File.Exists settingsOptions.Value.ChromeExecutablePath
+        then
+            Some settingsOptions.Value.ChromeExecutablePath
+        else
+            commonPaths |> List.tryFind File.Exists
+
+    let launchOptions =
+        task {
+            let platform = platformService.GetPlatform()
+            let chromePath = findChromePath platform
+
+            let options =
+                LaunchOptions(Headless = true, Args = [| "--no-sandbox"; "--disable-setuid-sandbox" |])
+
+            match chromePath with
+            | Some path ->
+                options.ExecutablePath <- path
+                return options
+            | None ->
+                logger.LogInformation "Chrome not found. Downloading browser (once)..."
+                let browserFetcher = new BrowserFetcher()
+                let! installedBrowser = browserFetcher.DownloadAsync()
+                settingsOptions.Value.ChromeExecutablePath <- installedBrowser.GetExecutablePath()
+                lock settingsOptions.Value (fun () -> settingsOptions.Value.Save())
+                logger.LogInformation $"Browser downloaded to: {installedBrowser.GetExecutablePath()}"
+                return options
+        }
+
     interface IGeneratePdfService with
         member _.CreateAsync(key: string, model: Resume, outputPath: string) : Task<unit> =
             task {
                 try
-                    let browserFetcher = new BrowserFetcher()
-                    let! _installedBrowser = browserFetcher.DownloadAsync()
                     let! htmlContent = razorEngineService.RenderAsync(key, model)
 
                     let pdfOptions =
@@ -453,17 +507,15 @@ type GeneratePdfService(razorEngineService: IRazorEngineService, logger: ILogger
                             Format = PaperFormat.A4,
                             DisplayHeaderFooter = false,
                             PrintBackground = true,
-                            MarginOptions = new MarginOptions(Top = "0mm", Bottom = "0mm", Left = "0mm", Right = "0mm")
+                            MarginOptions = MarginOptions(Top = "0mm", Bottom = "0mm", Left = "0mm", Right = "0mm")
                         )
 
-                    use! browser =
-                        Puppeteer.LaunchAsync(
-                            LaunchOptions(Headless = true, Args = [| "--no-sandbox"; "--disable-setuid-sandbox" |])
-                        )
-
+                    let! launchOptions = launchOptions
+                    use! browser = Puppeteer.LaunchAsync launchOptions
                     use! page = browser.NewPageAsync()
                     do! page.SetContentAsync htmlContent
                     do! page.PdfAsync(outputPath, pdfOptions)
+
                 with ex ->
                     logger.LogError(ex, $"Error generating PDF: {outputPath}")
             }

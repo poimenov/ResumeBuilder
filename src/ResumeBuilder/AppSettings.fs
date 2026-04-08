@@ -26,10 +26,11 @@ type public AppSettings() =
     static member WwwRootFolderPath =
         Path.Combine(AppContext.BaseDirectory, AppSettings.WwwRootFolderName)
 
-    member val WindowWidth: int = 1024 with get, set
+    member val WindowWidth: int = 1200 with get, set
     member val WindowHeight: int = 768 with get, set
     member val CultureName: string = "en-US" with get, set
     member val IsDarkMode: bool = false with get, set
+    member val ChromeExecutablePath: string = "" with get, set
 
     [<JsonIgnore>]
     member val CurrentRegion = RegionInfo.CurrentRegion with get

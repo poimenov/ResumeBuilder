@@ -209,6 +209,7 @@ let app =
                             MudText'' {
                                 Typo Typo.h6
                                 class' "pa-4"
+                                style' "padding-bottom: 0px !important;"
 
                                 SectionOutlet'' { SectionName "Title" }
                             }

@@ -117,13 +117,10 @@ let experiencePage =
                             Value'(getPeriod, setPeriod)
                         }
 
-                        MudInputLabel'' {
-                            style' "margin-top: 16px;"
-                            localizer["Description"]
-                        }
+                        MudInputLabel'' { localizer["Description"] }
 
                         let attributes: IDictionary<string, obj> =
-                            dict [ ("style", "max-height: calc(100dvh - 680px);") ]
+                            dict [ ("style", "max-height: calc(100dvh - 664px);") ]
 
                         MudHtmlEditor.create (
                             getDescription,
