@@ -1,0 +1,642 @@
+@using static ResumeBuilder.Services
+@model Resume
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@Model.Name - @Model.Headline</title>
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700" rel="stylesheet">
+
+    <style type="text/css">
+            * {
+                -webkit-font-smoothing: antialiased;
+                -moz-osx-font-smoothing: grayscale;
+                -webkit-box-sizing: border-box;
+                box-sizing: border-box
+            }
+
+            html {
+                height: 100%
+            }
+
+            body {
+                font-family: 'Source Sans Pro', 'Helvetica', Arial, sans-serif;
+                background: #f3f4f6;
+                min-height: 100vh;
+                padding: 20px;
+                margin: 0;
+                font-size: 12px;
+                line-height: 22px;
+                color: #333;
+            }
+
+            .mx-auto {
+                max-width: 21cm;
+                margin: 0 auto;
+                width: 100%;
+            }
+
+            .resume-preview-container {
+                background: white;
+                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+                border-radius: 12px;
+                overflow: hidden;
+                width: 100%;
+                position: relative;
+                min-height: auto;
+            }
+
+            h1 {
+                font-size: 28px;
+                margin: 0;
+                font-weight: 900;
+                letter-spacing: .04em
+            }
+
+            h2 {
+                text-transform: uppercase;
+                letter-spacing: .08em;
+                font-size: 14px;
+                font-weight: 600;
+                margin: 0;
+                padding: 0
+            }
+
+            h3 {
+                font-size: 13px;
+                font-weight: 600;
+                margin: 0;
+                padding: 0
+            }
+
+            p {
+                color: #4c4c4c;
+                line-height: 18px;
+                font-weight: 400;
+                margin: 0;
+                padding: 0;
+            }
+
+            .hero--bg {
+                position: absolute;
+                top: 0;
+                left: 0;
+                height: 80px;
+                width: 100%;
+                background: #47806d;
+            }
+
+            .sections {
+                margin-left: 240px;
+                padding: 10px 15px 10px 15px;
+                position: relative;
+                background: #fff;
+            }
+
+            .section {
+                position: relative;
+                width: 100%;
+                padding: 0;
+                margin-bottom: 15px;
+            }
+
+            .section a {
+                color: #4c4c4c;
+                text-decoration: none;
+            }
+
+            .section.section--summary {
+                margin-top: 10px;
+                margin-bottom: 15px;
+            }
+
+            .section--title {
+                display: inline-block;
+                width: 100%;
+                position: relative;
+                z-index: 99;
+                margin: 0;
+                background: #fff;
+                padding: 10px 0 8px 0;
+                page-break-inside: avoid;
+                border-bottom: 2px solid #47806d;
+            }
+
+            .section--title h2 {
+                display: inline-block;
+                background: #fff;
+                padding-right: 10px;
+            }
+
+            .timeline-wrapper {
+                position: relative;
+                padding-left: 25px;
+            }
+
+            .timeline-line {
+                position: absolute;
+                left: 10px;
+                top: 8px;
+                bottom: 8px;
+                width: 2px;
+                background: #47806d;
+            }
+
+            .timeline-item {
+                position: relative;
+                margin-bottom: 20px;
+                padding-bottom: 10px;
+            }
+
+            .timeline-item:last-child {
+                margin-bottom: 0;
+                padding-bottom: 0;
+            }
+
+            .timeline-dot {
+                position: absolute;
+                left: -19px;
+                top: 3px;
+                width: 10px;
+                height: 10px;
+                border-radius: 50%;
+                background: white;
+                border: 2px solid #47806d;
+                z-index: 2;
+            }
+
+            .experience-date {
+                font-size: 12px;
+                color: #47806d;
+                font-weight: 600;
+                margin-bottom: 5px;
+            }
+
+            .experience-company {
+                font-size: 14px;
+                font-weight: 700;
+                color: #333;
+                margin-bottom: 3px;
+            }
+
+            .experience-company a {
+                color: #333;
+                text-decoration: none;
+            }
+
+            .experience-company a:hover {
+                text-decoration: underline;
+                color: #47806d;
+            }
+
+            .experience-position {
+                font-size: 13px;
+                font-weight: 500;
+                color: #666;
+                margin-bottom: 8px;
+                font-style: italic;
+            }
+
+            .experience-description {
+                font-size: 12px;
+                color: #4c4c4c;
+                line-height: 18px;
+            }
+
+            .experience-description ul,
+            .experience-description ol {
+                margin: 0;
+                padding-left: 20px;
+            }
+
+            .experience-description ul li,
+            .experience-description ol li {
+                margin-bottom: 4px;
+            }
+
+            .education-date {
+                font-size: 12px;
+                color: #47806d;
+                font-weight: 600;
+                margin-bottom: 5px;
+            }
+
+            .education-school {
+                font-size: 14px;
+                font-weight: 700;
+                color: #333;
+                margin-bottom: 3px;
+            }
+
+            .education-degree {
+                font-size: 13px;
+                font-weight: 500;
+                color: #666;
+                margin-bottom: 5px;
+            }
+
+            .education-area {
+                font-size: 12px;
+                color: #4c4c4c;
+            }
+
+            .section--content-single-textarea {
+                padding-bottom: 10px
+            }
+
+            .section--content ul,
+            .section--content ol {
+                page-break-inside: auto;
+                white-space: normal;
+                font-weight: 400;
+                list-style-position: outside;
+                color: #4c4c4c;
+                margin: 0;
+                padding: 0 0 0 16px
+            }
+
+            .section--content ul li,
+            .section--content ol li {
+                line-height: 18px;
+                margin-bottom: 4px;
+            }
+
+            li[data-list="bullet"] {
+                list-style-type: disc;
+            }
+
+            .sidebar {
+                position: absolute;
+                top: 0;
+                left: 0;
+                padding: 15px 0 15px 20px;
+                width: 240px;
+                min-height: 100%;
+                height: 100%;
+                background: #47806d;
+                color: #fff;
+            }
+
+            .avatar {
+                display: inline-block;
+                padding: 0;
+                margin: 10px 0 0 35px;
+                height: 120px;
+                width: 120px;
+                border-radius: 12px;
+                background-size: cover !important;
+                border: 3px solid #fff
+            }
+
+            .sidebar--data {
+                display: block;
+                margin-top: 15px;
+            }
+
+            .sidebar--title {
+                font-size: 14px;
+                font-style: normal;
+                font-weight: 600;
+                padding: 10px 0 5px 0;
+                margin: 0;
+                page-break-inside: avoid;
+                border-bottom: 1px solid #fff
+            }
+
+            .sidebar--label {
+                font-weight: 600
+            }
+
+            .sidebar--list {
+                display: block;
+                list-style: none;
+                margin: 0;
+                padding: 0
+            }
+
+            .sidebar--item {
+                display: block;
+                list-style: none;
+                font-size: 12px;
+                margin: 0;
+                padding: 0 5px 8px 0
+            }
+
+            .contact-item {
+                position: relative;
+                padding-left: 22px;
+                margin-bottom: 10px;
+                font-size: 11px;
+                line-height: 1.4;
+            }
+
+            .contact-item svg {
+                position: absolute;
+                top: 2px;
+                left: 0;
+                width: 14px;
+                height: 14px;
+                fill: #fff;
+            }
+
+            .contact-item a,
+            .contact-item span {
+                color: #fff;
+                text-decoration: none;
+                word-break: break-all;
+            }
+
+            .contact-item a:hover {
+                text-decoration: underline;
+            }
+
+            .skills-keywords {
+                padding: 2px 0 6px 0;
+                font-size: 11px;
+                opacity: 0.85;
+                line-height: 1.4;
+            }
+
+            .language-dots {
+                display: inline-block;
+                float: right;
+                margin-right: 15px;
+            }
+
+            .lang-dot {
+                display: inline-block;
+                width: 8px;
+                height: 8px;
+                border-radius: 50%;
+                background: rgba(255, 255, 255, 0.4);
+                margin-left: 3px;
+            }
+
+            .lang-dot.active {
+                background: #fff;
+            }
+
+            @@media print {
+                body {
+                    background: white;
+                    padding: 0;
+                    margin: 0;
+                }
+
+                .resume-preview-container {
+                    box-shadow: none;
+                    border-radius: 0;
+                }
+            }
+    </style>
+</head>
+
+<body>
+    <div class="mx-auto">
+        <div class="resume-preview-container" style="position: relative; min-height: 500px;">
+            <div class="hero--bg"></div>
+            <aside class="sidebar">
+                <div class="avatar"
+                     style="background:url('@Model.Picture') no-repeat center; background-size: cover;background-color: white;">
+                    &nbsp;</div>
+
+                    <div class="sidebar--data">
+                        <h2 class="sidebar--title" style="margin-bottom: 10px;">Personal</h2>
+                        <div class="contact-item">
+                            <svg fill="#ffffff" height="24" viewBox="0 0 24 24" width="24"
+                                 xmlns="http://www.w3.org/2000/svg">
+                                <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
+                                <path d="M0 0h24v24H0z" fill="none" />
+                            </svg>
+                            <span>@Model.Location</span>
+                        </div>
+
+                        <div class="contact-item">
+                            <svg fill="#ffffff" height="24" viewBox="0 0 24 24" width="24"
+                                 xmlns="http://www.w3.org/2000/svg">
+                                <path d="M0 0h24v24H0z" fill="none" />
+                                <path
+                                d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z" />
+                            </svg>
+                            <span dir="ltr">@Model.Phone</span>
+                        </div>
+
+                        <div class="contact-item">
+                            <svg fill="#ffffff" height="24" viewBox="0 0 24 24" width="24"
+                                 xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
+                                <path d="M0 0h24v24H0z" fill="none" />
+                            </svg>
+                            <a href="mailto:@Model.Email">@Model.Email</a>
+                        </div>
+
+                        @foreach (var link in Model.Links)
+                        {
+                            <div class="contact-item">
+                                <svg fill="#ffffff" height="24" viewBox="0 0 24 24" width="24"
+                                     xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M0 0h24v24H0z" fill="none" />
+                                    <path
+                                    d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z" />
+                                </svg>
+                                <a href="@link" target="_blank" rel="noopener">
+                                    @{
+                                        if (Uri.TryCreate(link, UriKind.Absolute, out var uri))
+                                        {
+                                            if (uri.Host.Contains("github"))
+                                            {
+                                                @:GitHub
+                                            }
+                                            else if (uri.Host.Contains("linkedin"))
+                                            {
+
+                                                @:LinkedIn
+                                            }
+                                            else
+                                            {
+
+                                                @:Website
+                                            }
+                                        }
+                                        else
+                                        {
+
+                                            @:Website
+                                        }
+                                    }
+                                </a>
+                            </div>
+                        }
+                    </div>
+
+                    <div class="sidebar--data">
+                        <h2 class="sidebar--title">Skills</h2>
+                        <ul class="sidebar--list">
+                            @foreach (var skill in Model.Skills)
+                            {
+                                <li class="sidebar--item">
+                                    <span class="sidebar--label">@skill.Name</span>
+                                </li>
+                                if (skill.Keywords.Any())
+                                {
+                                    <div class="skills-keywords">
+                                        @string.Join(", ", skill.Keywords)
+                                    </div>
+                                }
+                            }
+                        </ul>
+                    </div>
+
+                    <div class="sidebar--data">
+                        <h2 class="sidebar--title">Languages</h2>
+                        <ul class="sidebar--list">
+                            @foreach (var language in Model.Languages)
+                            {
+                                <li class="sidebar--item">
+                                    <span class="sidebar--label">@language.Name
+                                        @if (!string.IsNullOrEmpty(language.Fluency))
+                                        {
+                                            <text>(@language.Fluency)</text>
+                                        }
+                                    </span>
+                                    <span class="language-dots">
+                                        @for (int i = 1; i <= 5; i++)
+                                        {
+                                            if (i <= language.Level)
+                                            {
+                                                <span class="lang-dot active"></span>
+                                            }
+                                            else
+                                            {
+                                                <span class="lang-dot"></span>
+                                            }
+                                        }
+                                    </span>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </aside>
+
+                <div class="sections">
+                    <div class="section--name">
+                        <h1>@Model.Name</h1>
+                        <h2>@Model.Headline</h2>
+                    </div>
+
+                    <div class="section section--summary">
+                        <div class="section--title">
+                            <h2>Profile</h2>
+                        </div>
+                        <div class="section--content">
+                            <p>@Raw(Model.Summary)</p>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <div class="section--title">
+                            <h2>Work experience</h2>
+                        </div>
+                        <div class="timeline-wrapper">
+                            <div class="timeline-line"></div>
+                            @foreach (var experience in Model.Experiences)
+                            {
+                                <div class="timeline-item">
+                                    <div class="timeline-dot"></div>
+                                    <div class="experience-date">@experience.Period</div>
+                                    <div class="experience-company">
+                                        @if (experience.Website != null)
+                                        {
+                                            <a href="@experience.Website.AbsoluteUri" target="_blank"
+                                               rel="noopener">@experience.Company</a>
+                                        }
+                                        else
+                                        {
+                                            @experience.Company
+                                        }
+                                    </div>
+                                    <div class="experience-position">@experience.Position</div>
+                                    @if (!string.IsNullOrEmpty(experience.Description))
+                                    {
+                                        <div class="experience-description">
+                                            @Raw(experience.Description)
+                                        </div>
+                                    }
+                                </div>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <div class="section--title">
+                            <h2>Education and Qualifications</h2>
+                        </div>
+                        <div class="timeline-wrapper">
+                            <div class="timeline-line"></div>
+                            @foreach (var education in Model.Educations)
+                            {
+                                <div class="timeline-item">
+                                    <div class="timeline-dot"></div>
+                                    <div class="education-date">@education.Period</div>
+                                    <div class="education-school">
+                                        @if (education.Website != null)
+                                        {
+                                            <a href="@education.Website.AbsoluteUri" target="_blank" rel="noopener"
+                                               style="color: #333; text-decoration: none;">@education.School</a>
+                                        }
+                                        else
+                                        {
+                                            @education.School
+                                        }
+                                        @if (!string.IsNullOrEmpty(education.Location))
+                                        {
+                                            <text>, @education.Location</text>
+                                        }
+                                    </div>
+                                    <div class="education-degree">@education.Degree</div>
+                                    @if (!string.IsNullOrEmpty(education.Area))
+                                    {
+                                        <div class="education-area">@education.Area</div>
+                                    }
+                                </div>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <div class="section--title">
+                            <h2>Certification</h2>
+                        </div>
+                        <div class="section--content section--content-single-textarea">
+                            <ul>
+                                @foreach (var cert in Model.Certifications)
+                                {
+                                    <li>
+                                        <strong>@cert.Title</strong>
+                                        @if (!string.IsNullOrEmpty(cert.Issuer))
+                                        {
+                                            <text> - @cert.Issuer</text>
+                                        }
+                                        @if (!string.IsNullOrEmpty(cert.Date))
+                                        {
+                                            <text> (@cert.Date)</text>
+                                        }
+                                        @if (cert.Website != null)
+                                        {
+                                            <text> - <a href="@cert.Website.AbsoluteUri" target="_blank"
+                                                            rel="noopener">@cert.Label</a></text>
+                                            }
+                                        </li>
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </body>
+
+    </html>

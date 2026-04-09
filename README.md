@@ -21,10 +21,10 @@
 
 - **[F#](https://github.com/dotnet/fsharp)** - Main programming language
 - **[.NET 10.0](https://github.com/dotnet/dotnet)** - Development platform
-- **[Photino.Blazor](https://github.com/tryphotino/photino.Blazor)**: - A lightweight native window to host the Blazor UI.
-- **[Fun.Blazor](https://github.com/slaveOftime/Fun.Blazor)**: A famous F#-first DSL for building Blazor UI components.
+- **[Photino.Blazor](https://github.com/tryphotino/photino.Blazor)**: - A lightweight native window to host the Blazor UI
+- **[Fun.Blazor](https://github.com/slaveOftime/Fun.Blazor)**: A famous F#-first DSL for building Blazor UI components
 - **[MudBlazor](https://github.com/MudBlazor/MudBlazor)** - Material Design components for Blazor
-- **[MudBlazor.HtmlEditor](https://github.com/erinnmclaughlin/MudBlazor.HtmlEditor)** - A customizable HTML editor component powered by [QuillJS](https://quilljs.com/).
+- **[MudBlazor.HtmlEditor](https://github.com/erinnmclaughlin/MudBlazor.HtmlEditor)** - A customizable HTML editor component powered by [QuillJS](https://quilljs.com/)
 - **[puppeteer-sharp](https://github.com/hardkoded/puppeteer-sharp)** - Headless Chrome .NET API
 - **[RazorLight](https://github.com/toddams/RazorLight)** - Template engine based on Microsoft's Razor parsing engine for .NET Core
 - **[log4net](https://github.com/apache/logging-log4net)**  Logging
